@@ -6,6 +6,10 @@
         <element id="directory" name="classes">
           <element id="module-output" name="BackEnd" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: com.sun.mail:javax.mail:1.6.0" />
+          <element id="library" level="project" name="Maven: javax.activation:activation:1.1" />
+        </element>
       </element>
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/target/BackEnd/META-INF/MANIFEST.MF" />
