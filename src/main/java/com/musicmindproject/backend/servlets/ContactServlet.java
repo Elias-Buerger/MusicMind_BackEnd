@@ -1,4 +1,4 @@
-package com.musicmindproject.backend.rest;
+package com.musicmindproject.backend.servlets;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
