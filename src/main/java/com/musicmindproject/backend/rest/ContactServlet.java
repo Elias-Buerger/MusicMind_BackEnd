@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Properties;
+
 @WebServlet("contact")
 public class ContactServlet extends HttpServlet {
     @Override
@@ -43,12 +44,11 @@ public class ContactServlet extends HttpServlet {
             message.setFrom(mail);
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(mail));
             message.setSubject("Contact from " + name);
-            message.setText("mail from "+ email + "\n" + comment);
+            message.setText("Mail from "+ email + "\n" + comment);
             Transport.send(message);
         }
         catch (MessagingException e) {
             e.printStackTrace();
         }
-
     }
 }
