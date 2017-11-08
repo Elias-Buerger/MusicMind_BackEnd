@@ -25,7 +25,7 @@
     </dependencies>
 
     <build>
-        <finalName>BackEnd</finalName>
+        <finalName>backend</finalName>
     </build>
 
 </project>
