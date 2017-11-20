@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 @Path("/contact")
-public class ContactServlet {
+public class ContactEndPoint {
 
     private static final String USERNAME = "musicmindproject@gmail.com";
     private static final String PASSWORD = "PNnTz8My";
@@ -55,7 +55,6 @@ public class ContactServlet {
             transport.connect();
             transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
             transport.close();
-            System.out.println("Successfully sent contact information");
         } catch (NoSuchProviderException e) {
             e.printStackTrace();
         } catch (AddressException e) {
