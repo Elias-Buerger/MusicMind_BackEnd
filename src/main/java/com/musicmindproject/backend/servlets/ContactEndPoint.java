@@ -1,15 +1,10 @@
 package com.musicmindproject.backend.servlets;
 
-import javax.json.JsonObject;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
