@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "musicmindproject-186608",
+  "private_key_id": "dd1f3e49e29b574ab53750dfdb883f854b6a39cc",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC8oKHT/ECEf5hw\n2NAy4SQ1fZMGvWN/+odr2TmlKgTtYd6+NeBQ1l4p4f5bS6lGR+OuXIc2zOBFWgz8\nxue+727ShQAmCYSzJlL6mDYPRoqqv9tVa6IhsE4RrVGmtXtUFitIDXPCljSrZnBo\n8JOfXtPuJFaw/sbONlDmluAGaorZ+EstUoHzxlMWEhKmMNm4JznhbxSznd1svmbh\nwJLVW1MBBmCLqwVgLXuexgGgYhNt8ZsdtRKA2X+PKcKTUU3d8bQWPJXbN+Yrernj\nkfAXSWHYibsUhgs/rdW8mc7XFEGhAQacEJUaJ3/3+z9xZQP9vAxJ3AOUQx2MFA/T\nih2nZ0tvAgMBAAECggEANFQHsOxo5ZkULDIpyAOnbONyV0tRAB77VJMFp+k5RrWA\n+pmtqh9eLhZQ3vjlc+bbpfJrXGuHyBWMRs/TWKfJwcM94E+BrcVy/aweSyyRqX7i\nFRdv+hKUBdlkLnBoT1J7HVkGBTRwViBsDOC4w1ymRIl2N1HmyyxMUzwF2CHUdVUv\nQX73sYC3LyT4KaGiH9WOWbsxHRkCJm9foa95muUfIJS+UYe1feExolXhdd1NIG2p\nvy+dZJ1roqsX4zdpezAMmlpbr4neqp6vEsECAEtUC8mIEgvPDiOKZsUaeDlJ53Hd\n7H7nTTALaQNJD8CRfRF3VXj6Te8Us7G5X/rkdSkR+QKBgQDoPaP+6IJ9tr6ALg5f\nt5Jj5rkvtKPSaGKMxTfNKdX1kZEeLzV7uUq77VdYaJjT31TT4lIPEsE0NbvBC9if\nNZ3JGNYrZbTDTOlsr3faUBcIKmDQU8Q15SZB3ItHdCU1L4sIrJW8a+vgv+F9LY5a\no+9D3dKfahp9XDPS3dbbInU1WwKBgQDP7MOLsmyr9pQV1UfroFvc7l5F3d8W1qjm\neTKJyz+b9SQyzFftArlbzDE65lVAi+lx4Jb6E8jKoxNDNgK/Q6TQaf2OjJUkd7tW\nKq5JhSr+1JeCIC7twZAzksoJixEmbPyKkVbUvJq20UYnbw6kilKLEtTcDGagvUSE\n+OgnlRMafQKBgBtpAw0X9ibORcetJ+cmLHH8DklSIa+4wEDrGf3t/SHBr4YHfmF+\n6hIqHhACMF95UXK8mIDM7t6xpNpRAp0v39KXStfOZjpSvo4kW5n5r+43yjtsV5Eg\n3ZYSaKHjVGzlkpxQek/F0Q4yt3NlyBJsnNW+vZgxFrVLB5bQtgYhGAJXAoGBALDz\nUB+tQyq9+Jz0G/b9S/Cjs/tFrTwkhy1Na6M1I/c4EwxgN1vve4wSJLt5logOCift\n+M7u020Qh64lYwUfLj5oVW9hWPPmKbpVLGpJOKQSjLYjaYzRtEUP4X1pqrjG+815\njyoRMKHxTAD3VMDXLxRIfHqg2x5ktNFtezVkexOJAoGBAJCACNf3kzrUv4B5Bflo\nqF3SO2TyNG7IAeDylMAjd/OTEK+33Cpw45vN1KOx2FDnk0rrMniOz7ZKnlQdHJkV\n8lMRsBGFPEfBQhaPhlVwfzJSEqWX+QfMRx532/hVYYgOJ5HZGMPovmVeIIdv6A10\nOuc2AzU+aPlHe2a5xDLmaZPU\n-----END PRIVATE KEY-----\n",
+  "client_email": "musicmindproject@musicmindproject-186608.iam.gserviceaccount.com",
+  "client_id": "103494460327865781809",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/musicmindproject%40musicmindproject-186608.iam.gserviceaccount.com"
+}
