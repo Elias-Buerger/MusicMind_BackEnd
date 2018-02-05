@@ -27,6 +27,10 @@ import com.google.api.services.analyticsreporting.v4.model.Report;
 import com.google.api.services.analyticsreporting.v4.model.ReportRequest;
 import com.google.api.services.analyticsreporting.v4.model.ReportRow;
 
+/*
+    Provides infos to our website
+    fuck off buerger, comment!
+ */
 public class AnalyticsManager {
 
     private static AnalyticsManager instance;

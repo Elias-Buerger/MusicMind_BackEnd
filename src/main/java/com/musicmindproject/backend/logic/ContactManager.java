@@ -27,6 +27,7 @@ public class ContactManager {
 
     public void sendEmail(String name, String email, String subject, String comment) throws ServletException, IOException {
         //sending the email
+        //setting the properties
         Properties props = new Properties();
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.port", 587);
@@ -34,17 +35,21 @@ public class ContactManager {
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.auth", "true");
 
+
         Authenticator auth = new SMTPAuthenticator();
         Session session = Session.getInstance(props, auth);
         Transport transport;
         try {
+            //filling the email with the data
             transport = session.getTransport();
+            //the email
             MimeMessage message = new MimeMessage(session);
             message.setSubject("Comment by " + name + ": " + subject);
             message.setContent("Mail from : " + email + "\n" + comment, "text/plain");
             message.setFrom(new InternetAddress(USERNAME));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(USERNAME));
             transport.connect();
+            //sending the mail
             transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
             transport.close();
         } catch (NoSuchProviderException e) {
