@@ -28,6 +28,7 @@ public class ContactManager {
     public void sendEmail(String name, String email, String subject, String comment) throws ServletException, IOException {
         //sending the email
         //setting the properties
+        //
         Properties props = new Properties();
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.port", 587);
