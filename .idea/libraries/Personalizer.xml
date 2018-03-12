@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Personalizer">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../Personalizer" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../Personalizer/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Personalizer/src/test/java" />
+    </SOURCES>
+  </library>
+</component>

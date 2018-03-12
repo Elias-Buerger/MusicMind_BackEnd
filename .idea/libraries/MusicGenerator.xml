@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="MusicGenerator">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../MusicGenerator" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../MusicGenerator/src/main/java" />
+    </SOURCES>
+  </library>
+</component>
