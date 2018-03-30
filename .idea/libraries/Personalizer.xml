@@ -1,12 +1,9 @@
 <component name="libraryTable">
   <library name="Personalizer">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/../Personalizer" />
+      <root url="jar://$PROJECT_DIR$/../Personalizer/classes/artifacts/Personalizer_jar/Personalizer.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="file://$PROJECT_DIR$/../Personalizer/src/main/java" />
-      <root url="file://$PROJECT_DIR$/../Personalizer/src/test/java" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>
