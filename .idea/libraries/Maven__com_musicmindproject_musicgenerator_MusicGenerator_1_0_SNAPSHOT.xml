@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.musicmindproject.musicgenerator:MusicGenerator:1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/musicmindproject/musicgenerator/MusicGenerator/1.0-SNAPSHOT/MusicGenerator-1.0-20180330.164239-5.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/musicmindproject/musicgenerator/MusicGenerator/1.0-SNAPSHOT/MusicGenerator-1.0-20180330.164239-5-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/musicmindproject/musicgenerator/MusicGenerator/1.0-SNAPSHOT/MusicGenerator-1.0-20180330.164239-5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="MusicGenerator">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../MusicGenerator/out/artifacts/MusicGenerator_jar/MusicGenerator.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

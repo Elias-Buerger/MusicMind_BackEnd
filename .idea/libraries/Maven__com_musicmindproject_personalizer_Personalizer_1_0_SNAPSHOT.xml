@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.musicmindproject.personalizer:Personalizer:1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/musicmindproject/personalizer/Personalizer/1.0-SNAPSHOT/Personalizer-1.0-20180330.164255-3.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/musicmindproject/personalizer/Personalizer/1.0-SNAPSHOT/Personalizer-1.0-20180330.164255-3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/musicmindproject/personalizer/Personalizer/1.0-SNAPSHOT/Personalizer-1.0-20180330.164255-3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
