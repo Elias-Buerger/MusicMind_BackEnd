@@ -1,4 +1,4 @@
-import com.musicmindproject.personalizer.DatabaseManager;
+import com.musicmindproject.backend.DatabaseManager;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

@@ -1,6 +1,6 @@
 package com.musicmindproject.backend.rest.endpoints;
 
-import com.musicmindproject.personalizer.DatabaseManager;
+import com.musicmindproject.backend.DatabaseManager;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

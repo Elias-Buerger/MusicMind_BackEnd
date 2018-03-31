@@ -1,4 +1,4 @@
-import com.musicmindproject.personalizer.PersonalityEvaluator;
+import com.musicmindproject.backend.logic.PersonalityEvaluator;
 import org.junit.Test;
 
 import static org.junit.Assert.assertArrayEquals;
