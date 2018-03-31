@@ -14,6 +14,10 @@ import java.util.Random;
 
 @Path("music")
 public class MusicEndpoint {
+    /**
+     * @param id
+     * @return JsonObject with Personality, Username, UserId, Path to Music-Track
+     */
     @GET
     @Path("{id}")
     public int doMusicGet(@PathParam("id") int id) {
@@ -24,6 +28,8 @@ public class MusicEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response doMusicPost(JsonObject answer) {
+
+        System.out.println(answer);
 
         int totalNumberOfQuestions = DatabaseManager.getInstance().getNumberOfAvailableQuestions();
 
@@ -62,6 +68,7 @@ public class MusicEndpoint {
 
         return Response.ok(builder.build(), MediaType.APPLICATION_JSON).build();
     }
+
 
     @GET
     @Path("{query}/{min}/{max}")
