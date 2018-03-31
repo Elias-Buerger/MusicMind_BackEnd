@@ -20,7 +20,7 @@ public class MusicEndpoint {
         return 0;
     }
 
-    @GET
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response doMusicPost(JsonObject answer) {
@@ -61,5 +61,11 @@ public class MusicEndpoint {
         builder.add("musicPath", musicDirectory.listFiles()[Math.abs(rand.nextInt()%musicDirectory.listFiles().length)].getName());
 
         return Response.ok(builder.build(), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("{query}/{min}/{max}")
+    public Response doMusicGet(@PathParam("query") String query, @PathParam("min") int min, @PathParam("max") int max){
+        return Response.ok().build();
     }
 }
