@@ -1,11 +1,8 @@
 package com.musicmindproject.backend.logic;
 
 import javax.mail.*;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.ServletException;
-import java.io.IOException;
 import java.util.Properties;
 
 public class ContactManager {
@@ -20,12 +17,11 @@ public class ContactManager {
     }
 
     private final String USERNAME = "musicmindproject@gmail.com";
-    private final String PASSWORD = "PNnTz8My";
 
     private ContactManager() {
     }
 
-    public void sendEmail(String name, String email, String subject, String comment) throws ServletException, IOException {
+    public void sendEmail(String name, String email, String subject, String comment) {
         //sending the email
         //setting the properties
         //
@@ -53,10 +49,6 @@ public class ContactManager {
             //sending the mail
             transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
             transport.close();
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        } catch (AddressException e) {
-            e.printStackTrace();
         } catch (MessagingException e) {
             e.printStackTrace();
         }
@@ -67,6 +59,7 @@ public class ContactManager {
          * @return will return a password authentication
          */
         public PasswordAuthentication getPasswordAuthentication() {
+            String PASSWORD = "PNnTz8My";
             return new PasswordAuthentication(USERNAME, PASSWORD);
         }
     }

@@ -1,7 +1,7 @@
-package com.musicmindproject.backend.rest;
+package com.musicmindproject.backend.rest.endpoints;
 
-import com.musicmindproject.personalizer.DatabaseManager;
-import com.musicmindproject.personalizer.PersonalityEvaluator;
+import com.musicmindproject.backend.DatabaseManager;
+import com.musicmindproject.backend.logic.PersonalityEvaluator;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -69,10 +69,18 @@ public class MusicEndpoint {
         return Response.ok(builder.build(), MediaType.APPLICATION_JSON).build();
     }
 
-
+    /**
+     * @param query
+     * Fixed Keywords:
+     * - newest
+     * - popularity
+     * @param min
+     * @param max
+     * @return JsonArray of doMusicGet() with all Users (max 50 Users)
+     */
     @GET
     @Path("{query}/{min}/{max}")
-    public Response doMusicGet(@PathParam("query") String query, @PathParam("min") int min, @PathParam("max") int max){
+    public Response doMusicGetForExplore(@PathParam("query") String query, @PathParam("min") int min, @PathParam("max") int max){
         return Response.ok().build();
     }
 }

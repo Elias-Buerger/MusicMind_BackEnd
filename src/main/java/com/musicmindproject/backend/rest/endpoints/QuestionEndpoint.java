@@ -1,4 +1,4 @@
-package com.musicmindproject.backend.rest;
+package com.musicmindproject.backend.rest.endpoints;
 
 import com.musicmindproject.personalizer.DatabaseManager;
 

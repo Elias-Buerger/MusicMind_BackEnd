@@ -7,14 +7,6 @@
           <element id="module-output" name="BackEnd" />
         </element>
         <element id="directory" name="lib">
-          <element id="file-copy" path="$MAVEN_REPOSITORY$/com/musicmindproject/musicgenerator/MusicGenerator/1.0-SNAPSHOT/MusicGenerator-1.0-20180331.143247-6.jar" output-file-name="MusicGenerator-1.0-SNAPSHOT.jar" />
-          <element id="library" level="project" name="Maven: com.explodingart:jmusic:1.6.4" />
-          <element id="library" level="project" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-jre8:1.2.10" />
-          <element id="library" level="project" name="Maven: org.jetbrains.kotlin:kotlin-stdlib:1.2.10" />
-          <element id="library" level="project" name="Maven: org.jetbrains:annotations:13.0" />
-          <element id="library" level="project" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-jre7:1.2.10" />
-          <element id="file-copy" path="$MAVEN_REPOSITORY$/com/musicmindproject/personalizer/Personalizer/1.0-SNAPSHOT/Personalizer-1.0-20180331.164104-5.jar" output-file-name="Personalizer-1.0-SNAPSHOT.jar" />
-          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.6" />
           <element id="library" level="project" name="Maven: com.sun.mail:javax.mail:1.6.0" />
           <element id="library" level="project" name="Maven: javax.activation:activation:1.1" />
           <element id="library" level="project" name="Maven: com.google.http-client:google-http-client-gson:1.21.0" />
