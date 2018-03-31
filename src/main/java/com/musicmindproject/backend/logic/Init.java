@@ -12,6 +12,6 @@ public class Init {
 
     @PostConstruct
     public void init() {
-        MidiGeneratorRunner.getInstance().init();
+        //MidiGeneratorRunner.getInstance().init();
     }
 }

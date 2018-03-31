@@ -1,4 +1,3 @@
-import com.musicmindproject.backend.rest.BackEndEndPoint;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
@@ -10,8 +9,6 @@ import java.io.IOException;
 import static junit.framework.TestCase.fail;
 
 public class UnitTests {
-    private BackEndEndPoint endPoint = new BackEndEndPoint();
-
     /*@Test
     public void testSendingEmail(){
         try {
