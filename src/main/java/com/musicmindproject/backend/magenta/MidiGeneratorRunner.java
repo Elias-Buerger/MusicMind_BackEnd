@@ -1,6 +1,6 @@
 package com.musicmindproject.backend.magenta;
 
-import com.musicmindproject.backend.enums.MusicGenre;
+import com.musicmindproject.backend.entities.enums.MusicGenre;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Startup;
@@ -85,7 +85,8 @@ public class MidiGeneratorRunner {
                                     Process magentaCommand;
                                     if(!Files.exists(Paths.get(String.format(OUTPUT_DIRECTORY, genre.name().toLowerCase())))) {
                                         File dir = new File(String.format(OUTPUT_DIRECTORY, genre.name().toLowerCase()));
-                                        dir.mkdir();
+                                        if(!dir.mkdir())
+                                            break;
                                     }
 
                                     if (Objects.requireNonNull(new File(String.format(OUTPUT_DIRECTORY, genre.name().toLowerCase())).listFiles()).length < 50) {
