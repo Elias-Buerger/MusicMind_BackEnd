@@ -12,10 +12,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Objects;
 
-@Singleton
 @Startup
+@Singleton
 public class MidiGeneratorRunner {
-
     private static final String AVAILABLE_MUSIC = "/mnt/midifiles/%s";
     private static final String GENERATED_DATASET = "/mnt/sequence_examples/%s";
     private static final String TFRECORD_FILE = "/mnt/sequences_tmp/%s.tfrecord";
@@ -85,11 +84,10 @@ public class MidiGeneratorRunner {
                         //noinspection InfiniteLoopStatement
 
                         Process magentaCommand;
-                                    /*if(!Files.exists(Paths.get(String.format(OUTPUT_DIRECTORY, currName)))) {
-                                        File dir = new File(String.format(OUTPUT_DIRECTORY, currName));
-                                        if(!dir.mkdir())
-                                            break;
-                                    }*/
+                        if (!Files.exists(Paths.get(String.format(OUTPUT_DIRECTORY, currName)))) {
+                            File dir = new File(String.format(OUTPUT_DIRECTORY, currName));
+                            dir.mkdir();
+                        }
 
                         if (Objects.requireNonNull(new File(String.format(OUTPUT_DIRECTORY, currName)).listFiles()).length < 10) {
                             magentaCommand = Runtime.getRuntime().exec(new String[]{"bash", "-c", "source activate magenta && bazel run //magenta/models/melody_rnn:melody_rnn_generate -- \\" +
