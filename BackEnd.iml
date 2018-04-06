@@ -17,7 +17,7 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="" />
         <datasource-mapping>
-          <factory-entry name="MusicMindPU" />
+          <factory-entry name="MMPU" />
           <factory-entry name="music-mind-persistence-unit" />
           <factory-entry name="mysql" />
         </datasource-mapping>

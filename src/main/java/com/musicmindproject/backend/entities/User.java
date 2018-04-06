@@ -1,9 +1,6 @@
 package com.musicmindproject.backend.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -15,6 +12,8 @@ public class User implements Serializable {
     @Id
     private String userId;
     private String userName;
+
+    @Column(name = "PATH")
     private String pathToMusicTrack;
     private double openness;
     private double conscientiousness;
@@ -23,6 +22,8 @@ public class User implements Serializable {
     private double neuroticism;
     private int shares;
     private int plays;
+
+    @Column(name = "DATE_OF_CREATION")
     private Timestamp dateOfCreation;
 
     public User() {

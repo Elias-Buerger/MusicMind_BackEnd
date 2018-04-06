@@ -31,6 +31,7 @@ public class MusicEndpoint {
     @GET
     @Path("{id}")
     public Response doMusicGet(@PathParam("id") String id) {
+
         return Response.ok().entity(new GsonBuilder().create().toJson(userManager.retrieve(id))).build();
     }
 

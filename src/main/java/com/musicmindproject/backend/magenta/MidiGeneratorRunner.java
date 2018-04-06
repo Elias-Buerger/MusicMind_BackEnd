@@ -43,6 +43,7 @@ public class MidiGeneratorRunner {
 
     @PostConstruct
     public void init() {
+        System.out.println("SERVER STARTED");
         for (MusicGenre genre : MusicGenre.values()) {
             for (Instrument instrument : genre.getInstruments()) {
                 String currName = genre.name().toLowerCase() + "_" + instrument.name().toLowerCase();
