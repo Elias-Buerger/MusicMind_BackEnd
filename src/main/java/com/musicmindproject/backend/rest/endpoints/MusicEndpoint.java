@@ -55,9 +55,6 @@ public class MusicEndpoint {
         String userID = answer.getString("" + (answer.size() - 1));
         String userName = answer.getString("" + (answer.size() - 2));
 
-        JsonObjectBuilder builder = Json.createObjectBuilder();
-
-        JsonObjectBuilder personalityBuilder = Json.createObjectBuilder();
         for(int i = 0; i < answerNumbers.length; i++){
             answerNumbers[i] = Integer.parseInt(answer.getString("" + i));
         }
@@ -65,14 +62,7 @@ public class MusicEndpoint {
 
         double[] values = evaluator.getOutputs(answerNumbers);
 
-        personalityBuilder.add("neuroticism", values[0]);
-        personalityBuilder.add("extraversion", values[3]);
-        personalityBuilder.add("openness", values[4]);
-        personalityBuilder.add("agreeableness", values[2]);
-        personalityBuilder.add("conscientiousness", values[1]);
-
-        builder.add("personality", personalityBuilder);
-
+        //TODO FINDING SPECIFIC MUSIC-TRACK
         final String PATHNAME = "/mnt/sequences_tmp/melody_rnn/generated_tracks";
         File musicDirectory = new File(PATHNAME);
         Random rand = new Random();
@@ -94,9 +84,7 @@ public class MusicEndpoint {
         }
         userManager.store(user);
 
-        builder.add("musicPath", filepath);
-
-        return Response.ok(builder.build(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(new GsonBuilder().create().toJson(user), MediaType.APPLICATION_JSON).build();
     }
 
     /**
