@@ -49,6 +49,9 @@ public class MidiGeneratorRunner {
 //        }
 
         for (MusicGenre genre : MusicGenre.values()) {
+
+            String currName = genre.name().toLowerCase();
+
             //JUST FOR TESTING
             if (genre == MusicGenre.COUNTRY) {
 
@@ -57,40 +60,40 @@ public class MidiGeneratorRunner {
                         try {
                             while (true) {
 //                            if (exitStatus == 0) {
-                                if (!Files.exists(Paths.get(String.format(TFRECORD_FILE, genre.name().toLowerCase())))) {
+                                if (!Files.exists(Paths.get(String.format(TFRECORD_FILE, currName)))) {
                                     System.out.println("NO DATASET FOR " + genre.name().toLowerCase() /*+ "/" + instrument.name()*/ + " FOUND, CREATING...");
                                     Process datasetGenerator = Runtime.getRuntime().exec(new String[]{"bash", "-c", "source activate magenta; bazel run //magenta/scripts:convert_dir_to_note_sequences -- \\" +
-                                            " --input_dir=" + String.format(AVAILABLE_MUSIC, genre.name().toLowerCase()) + " \\" +
-                                            " --output_file=" + String.format(TFRECORD_FILE, genre.name().toLowerCase()) + " \\" +
+                                            " --input_dir=" + String.format(AVAILABLE_MUSIC, currName) + " \\" +
+                                            " --output_file=" + String.format(TFRECORD_FILE, currName) + " \\" +
                                             " --recursive"}, null, new File(WORKING_DIRECTORY));
                                     datasetGenerator.waitFor();
-                                    System.out.println("CREATED DATASET FOR " + genre.name().toLowerCase() /*+ "/" + instrument.name()*/);
+                                    System.out.println("CREATED DATASET FOR " + currName /*+ "/" + instrument.name()*/);
 
                                 }
-                                if(!Files.exists(Paths.get(String.format(GENERATED_DATASET, genre.name().toLowerCase())))){
+                                if(!Files.exists(Paths.get(String.format(GENERATED_DATASET, currName)))){
                                     Process datasetGenerator = Runtime.getRuntime().exec(new String[]{"bash", "-c", "source activate magenta; bazel run //magenta/models/melody_rnn:melody_rnn_create_dataset -- \\" +
                                             " --config=attention_rnn \\" +
-                                            " --input=" + String.format(TFRECORD_FILE, genre.name().toLowerCase()) + " \\" +
-                                            " --output_dir=" + String.format(GENERATED_DATASET, genre.name().toLowerCase())+ " \\" +
+                                            " --input=" + String.format(TFRECORD_FILE, currName) + " \\" +
+                                            " --output_dir=" + String.format(GENERATED_DATASET, currName)+ " \\" +
                                             " --eval_ratio=0.10"}, null, new File(WORKING_DIRECTORY));
                                     datasetGenerator.waitFor();
-                                    System.out.println("CREATED EXAMPLE FOR " + genre.name().toLowerCase() /*+ "/" + instrument.name()*/);
+                                    System.out.println("CREATED EXAMPLE FOR " + currName /*+ "/" + instrument.name()*/);
                                 }
 
                                 //noinspection InfiniteLoopStatement
 
                                     Process magentaCommand;
-                                    if(!Files.exists(Paths.get(String.format(OUTPUT_DIRECTORY, genre.name().toLowerCase())))) {
-                                        File dir = new File(String.format(OUTPUT_DIRECTORY, genre.name().toLowerCase()));
+                                    if(!Files.exists(Paths.get(String.format(OUTPUT_DIRECTORY, currName)))) {
+                                        File dir = new File(String.format(OUTPUT_DIRECTORY, currName));
                                         if(!dir.mkdir())
                                             break;
                                     }
 
-                                    if (Objects.requireNonNull(new File(String.format(OUTPUT_DIRECTORY, genre.name().toLowerCase())).listFiles()).length < 50) {
+                                    if (Objects.requireNonNull(new File(String.format(OUTPUT_DIRECTORY, currName)).listFiles()).length < 50) {
                                         magentaCommand = Runtime.getRuntime().exec(new String[]{"bash", "-c", "source activate magenta && bazel run //magenta/models/melody_rnn:melody_rnn_train -- \\" +
                                                 " --config=attention_rnn \\" +
-                                                " --run_dir=" + String.format(RUN_DIRECTORY, genre.name().toLowerCase()) + " \\" +
-                                                " --sequence_example_file=" + String.format(SEQUENCE_EXAMPLE_FILE, genre.name().toLowerCase()) + " \\" +
+                                                " --run_dir=" + String.format(RUN_DIRECTORY, currName) + " \\" +
+                                                " --sequence_example_file=" + String.format(SEQUENCE_EXAMPLE_FILE, currName) + " \\" +
                                                 " --hparams=\"batch_size=64,rnn_layer_sizes=[64,64]\" \\" +
                                                 " --num_training_steps=" + NUM_TRAINING_STEPS}, null, new File(WORKING_DIRECTORY));
 
@@ -98,8 +101,8 @@ public class MidiGeneratorRunner {
                                     } else {
                                         magentaCommand = Runtime.getRuntime().exec(new String[]{"bash", "-c", "source activate magenta && bazel run //magenta/models/melody_rnn:melody_rnn_generate -- \\" +
                                                 " --config=attention_rnn \\" +
-                                                " --run_dir=" + String.format(RUN_DIRECTORY, genre.name().toLowerCase()) + " \\" +
-                                                " --output_dir=" + String.format(OUTPUT_DIRECTORY, genre.name().toLowerCase()) + " \\" +
+                                                " --run_dir=" + String.format(RUN_DIRECTORY, currName) + " \\" +
+                                                " --output_dir=" + String.format(OUTPUT_DIRECTORY, currName) + " \\" +
                                                 " --num_outputs=1 \\" +
                                                 " --num_steps=" + NUM_RUN_STEPS + " \\" +
                                                 " --hparams=\"batch_size=64,rnn_layer_sizes=[64,64]\" \\" +
