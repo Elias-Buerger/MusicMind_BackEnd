@@ -1,5 +1,6 @@
 package com.musicmindproject.backend.logic;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 public class PersonalityEvaluator {
@@ -15,9 +16,9 @@ public class PersonalityEvaluator {
         return instance;
     }
 
-    private PersonalityEvaluator() {
+    @PostConstruct
+    private void init(){
         factors = questionManager.getFactors();
-
     }
 
     /**

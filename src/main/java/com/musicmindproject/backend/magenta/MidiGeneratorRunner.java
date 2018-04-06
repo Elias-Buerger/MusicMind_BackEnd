@@ -4,6 +4,7 @@ import com.musicmindproject.backend.entities.enums.Instrument;
 import com.musicmindproject.backend.entities.enums.MusicGenre;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Objects;
 
+@Singleton
 @Startup
 public class MidiGeneratorRunner {
 
