@@ -102,16 +102,29 @@ public class MusicEndpoint {
      * @param query
      * Fixed Keywords:
      * - newest
-     * - popularity
+     * - hottest
+     * - name="..."
      * @param min
      * Ignore
      * @param max
      * Ignore
      * @return JsonArray of doMusicGet() with all Users (max 50 Users)
      */
-    @GET
+    @POST
     @Path("{query}/{min}/{max}")
     public Response doMusicGetForExplore(@PathParam("query") String query, @PathParam("min") int min, @PathParam("max") int max){
+        return Response.ok().build();
+    }
+
+    /**
+     * @param music
+     * object:
+     *  - player = id of person who played music
+     *  - played = id of person who created music
+     */
+    @GET
+    @Path("play")
+    public Response doMusicPlay(JsonObject music){
         return Response.ok().build();
     }
 }

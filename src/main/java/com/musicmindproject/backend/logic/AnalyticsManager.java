@@ -122,7 +122,6 @@ public class AnalyticsManager {
 
         Segment segment = getFilter("ga:eventCategory", "share");
 
-
         ReportRequest result = new ReportRequest().setViewId("164732604").setDateRanges(Arrays.asList(new DateRange[]{dateRange})).setDimensions(Arrays.asList(new Dimension[]{eventCategory, segmentDimensions})).setSegments(Arrays.asList(new Segment[]{segment})).setMetrics(Arrays.asList(new Metric[]{personalities}));
 
         GetReportsRequest getReport = new GetReportsRequest().setReportRequests(Arrays.asList(new ReportRequest[]{result}));
