@@ -1,4 +1,4 @@
-package com.musicmindproject.backend.enums;
+package com.musicmindproject.backend.entities.enums;
 
 /**
  * Available instruments

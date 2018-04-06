@@ -1,9 +1,10 @@
 package com.musicmindproject.backend.logic;
 
-import com.musicmindproject.backend.DatabaseManager;
+import javax.inject.Inject;
 
 public class PersonalityEvaluator {
-
+    @Inject
+    private QuestionManager questionManager;
     private double[][] factors;
     private static PersonalityEvaluator instance;
 
@@ -15,7 +16,7 @@ public class PersonalityEvaluator {
     }
 
     private PersonalityEvaluator() {
-        factors = DatabaseManager.getInstance().getFactors();
+        factors = questionManager.getFactors();
 
     }
 
