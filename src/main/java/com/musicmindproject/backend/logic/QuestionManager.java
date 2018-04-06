@@ -1,11 +1,14 @@
 package com.musicmindproject.backend.logic;
 
+import javax.ejb.Stateless;
 import java.sql.*;
 import java.util.List;
 
 /**
  * Provides access to the MySql-Database. SINGLETON
  */
+
+@Stateless
 public class QuestionManager extends DatabaseManager<String>{
 
     /**
