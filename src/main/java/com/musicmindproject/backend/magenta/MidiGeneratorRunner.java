@@ -6,8 +6,10 @@ import com.musicmindproject.backend.entities.enums.MusicGenre;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -52,9 +54,9 @@ public class MidiGeneratorRunner {
                     try {
                         //while (true) {
 //                            if (exitStatus == 0) {
-                                /*if (!Files.exists(Paths.get(String.format(TFRECORD_FILE, currName)))) {
+                                /*if (Files.notExists(Paths.get(String.format(TFRECORD_FILE, currName)))) {
                                     System.out.println("NO DATASET FOR " + genre.name().toLowerCase() + "/" + instrument.name() + " FOUND, CREATING...");
-                                    Process datasetGenerator = Runtime.getRuntime().exec(new String[]{"bash", "-c", "source activate magenta; bazel run //magenta/scripts:convert_dir_to_note_sequences -- \\" +
+                                    Process datasetGenerator = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "source /root/miniconda2/bin/activate magenta; bazel run //magenta/scripts:convert_dir_to_note_sequences -- \\" +
                                             " --input_dir=" + String.format(AVAILABLE_MUSIC, currName) + " \\" +
                                             " --output_file=" + String.format(TFRECORD_FILE, currName) + " \\" +
                                             " --recursive"}, null, new File(WORKING_DIRECTORY));
@@ -62,8 +64,8 @@ public class MidiGeneratorRunner {
                                     System.out.println("CREATED DATASET FOR " + currName + "/" + instrument.name());
 
                                 }
-                                if(!Files.exists(Paths.get(String.format(GENERATED_DATASET, currName)))){
-                                    Process datasetGenerator = Runtime.getRuntime().exec(new String[]{"bash", "-c", "source activate magenta; bazel run //magenta/models/melody_rnn:melody_rnn_create_dataset -- \\" +
+                                if(Files.notExists(Paths.get(String.format(GENERATED_DATASET, currName)))){
+                                    Process datasetGenerator = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "source /root/miniconda2/bin/activate magenta; bazel run //magenta/models/melody_rnn:melody_rnn_create_dataset -- \\" +
                                             " --config=attention_rnn \\" +
                                             " --input=" + String.format(TFRECORD_FILE, currName) + " \\" +
                                             " --output_dir=" + String.format(GENERATED_DATASET, currName)+ " \\" +
@@ -71,8 +73,8 @@ public class MidiGeneratorRunner {
                                     datasetGenerator.waitFor();
                                     System.out.println("CREATED EXAMPLE FOR " + currName + "/" + instrument.name());
                                 }*/
-                        if (!Files.exists(Paths.get(String.format(RUN_DIRECTORY, currName)))) {
-                            Process networkTrainer = Runtime.getRuntime().exec(new String[]{"bash", "-c", "source activate magenta && bazel run //magenta/models/melody_rnn:melody_rnn_train -- \\" +
+                        if (Files.notExists(Paths.get(String.format(RUN_DIRECTORY, currName)))) {
+                            Process networkTrainer = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "source /root/miniconda2/bin/activate magenta; bazel run //magenta/models/melody_rnn:melody_rnn_train -- \\" +
                                     " --config=attention_rnn \\" +
                                     " --run_dir=" + String.format(RUN_DIRECTORY, currName) + " \\" +
                                     " --sequence_example_file=" + String.format(COUNTRY_SEQUENCE_EXAMPLE_FILE, currName) + " \\" +
@@ -84,13 +86,13 @@ public class MidiGeneratorRunner {
                         //noinspection InfiniteLoopStatement
 
                         Process magentaCommand;
-                        if (!Files.exists(Paths.get(String.format(OUTPUT_DIRECTORY, currName)))) {
+                        if (Files.notExists(Paths.get(String.format(OUTPUT_DIRECTORY, currName)))) {
                             File dir = new File(String.format(OUTPUT_DIRECTORY, currName));
                             dir.mkdir();
                         }
 
-                        if (Objects.requireNonNull(new File(String.format(OUTPUT_DIRECTORY, currName)).listFiles()).length < 10) {
-                            magentaCommand = Runtime.getRuntime().exec(new String[]{"bash", "-c", "source activate magenta && bazel run //magenta/models/melody_rnn:melody_rnn_generate -- \\" +
+                        //if (new File(String.format(OUTPUT_DIRECTORY, currName)).listFiles().length < 10) {
+                            magentaCommand = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "source /root/miniconda2/bin/activate magenta; bazel run //magenta/models/melody_rnn:melody_rnn_generate -- \\" +
                                     " --config=attention_rnn \\" +
                                     " --run_dir=" + String.format(RUN_DIRECTORY, currName) + " \\" +
                                     " --output_dir=" + String.format(OUTPUT_DIRECTORY, currName) + " \\" +
@@ -98,18 +100,38 @@ public class MidiGeneratorRunner {
                                     " --num_steps=" + NUM_RUN_STEPS + " \\" +
                                     " --hparams=\"batch_size=64,rnn_layer_sizes=[64,64]\" \\" +
                                     " --primer_melody=\"[60]\""}, null, new File(WORKING_DIRECTORY));
-                            magentaCommand.waitFor();
-                            System.out.println("1 FILE FOR " + genre.name().toLowerCase() + " CREATED");
+                            //magentaCommand.waitFor();
+                            System.out.println("1 FILE FOR " + currName + " CREATED");
 
-                        } else {
+
+                        BufferedReader stdInput = new BufferedReader(new
+                                InputStreamReader(magentaCommand.getInputStream()));
+
+                        BufferedReader stdError = new BufferedReader(new
+                                InputStreamReader(magentaCommand.getErrorStream()));
+
+// read the output from the command
+                        System.out.println("Here is the standard output of the command:\n");
+                        String s = null;
+                        while ((s = stdInput.readLine()) != null) {
+                            System.out.println(s);
+                        }
+
+// read any errors from the attempted command
+                        System.out.println("Here is the standard error of the command (if any):\n");
+                        while ((s = stdError.readLine()) != null) {
+                            System.out.println(s);
+                        }
+
+                        //} else {
 
 
                             //System.out.println("TRAINING FOR " + genre.name() + " FINISHED (" + NUM_TRAINING_STEPS + " steps)");
-                        }
+                        //}
 
 
                         //}
-                    } catch (IOException | InterruptedException e) {
+                    } catch (IOException | InterruptedException | NullPointerException e) {
                         System.err.println("Could not start magenta! No training or generating will be done. Reason: " + e.getLocalizedMessage());
                         e.printStackTrace();
                         System.err.println();
