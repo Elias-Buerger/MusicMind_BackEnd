@@ -92,7 +92,7 @@ public class QuestionManager extends DatabaseManager<String>{
     }
 
     @Override
-    public List<String> retrieveMany(int min, int max) {
+    public List<String> retrieveMany(int min, int max, String query) {
         return null;
     }
 
