@@ -1,4 +1,4 @@
-import com.musicmindproject.backend.logic.QuestionManager;
+import com.musicmindproject.backend.logic.database.QuestionManager;
 import org.junit.Test;
 
 import javax.inject.Inject;

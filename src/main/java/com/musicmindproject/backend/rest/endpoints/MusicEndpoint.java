@@ -1,15 +1,16 @@
 package com.musicmindproject.backend.rest.endpoints;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.musicmindproject.backend.entities.Play;
 import com.musicmindproject.backend.entities.User;
-import com.musicmindproject.backend.logic.QuestionManager;
 import com.musicmindproject.backend.logic.PersonalityEvaluator;
-import com.musicmindproject.backend.logic.UserManager;
+import com.musicmindproject.backend.logic.database.PlaysManager;
+import com.musicmindproject.backend.logic.database.QuestionManager;
+import com.musicmindproject.backend.logic.database.UserManager;
 
 import javax.inject.Inject;
-import javax.json.Json;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -20,9 +21,12 @@ import java.util.Random;
 public class MusicEndpoint {
     @Inject
     private UserManager userManager;
-
+    @Inject
+    private PersonalityEvaluator evaluator;
     @Inject
     private QuestionManager questionManager;
+    @Inject
+    private PlaysManager playsManager;
 
     /**
      * @param id ID of the user
@@ -58,7 +62,6 @@ public class MusicEndpoint {
         for(int i = 0; i < answerNumbers.length; i++){
             answerNumbers[i] = Integer.parseInt(answer.getString("" + i));
         }
-        PersonalityEvaluator evaluator = PersonalityEvaluator.getInstance();
 
         double[] values = evaluator.getOutputs(answerNumbers);
 
@@ -92,17 +95,17 @@ public class MusicEndpoint {
      * Fixed Keywords:
      * - newest
      * - hottest
-     * - name="..."
+     * - everything else: name of the user / music-track
      * @param min
      * Ignore
      * @param max
      * Ignore
      * @return JsonArray of doMusicGet() with all Users (max 50 Users)
      */
-    @POST
+    @GET
     @Path("{query}/{min}/{max}")
     public Response doMusicGetForExplore(@PathParam("query") String query, @PathParam("min") int min, @PathParam("max") int max){
-        return Response.ok().build();
+        return Response.ok(userManager.retrieveMany(min, max, query)).build();
     }
 
     /**
@@ -114,6 +117,10 @@ public class MusicEndpoint {
     @GET
     @Path("play")
     public Response doMusicPlay(JsonObject music){
+        Play play = new GsonBuilder().create().fromJson(music.toString(), Play.class);
+
+        if(playsManager.retrieve(play) != null)
+            playsManager.store(play);
         return Response.ok().build();
     }
 }

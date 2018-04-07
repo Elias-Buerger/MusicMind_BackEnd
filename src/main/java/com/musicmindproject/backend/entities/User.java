@@ -7,7 +7,13 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "USER")
-@NamedQuery(name = "User.getAll", query = "SELECT u FROM User u")
+@NamedQueries({
+    @NamedQuery(name = "User.getAll", query = "SELECT u FROM User u"),
+    @NamedQuery(name = "User.hottest", query = "SELECT u FROM User u ORDER BY u.plays"),
+    @NamedQuery(name = "User.newest", query = "SELECT u FROM User u ORDER BY u.dateOfCreation DESC"),
+    @NamedQuery(name = "User.getByName", query = "SELECT u FROM User u WHERE u.userName LIKE :uName")
+})
+
 public class User implements Serializable {
     @Id
     private String userId;

@@ -1,4 +1,4 @@
-package com.musicmindproject.backend.logic;
+package com.musicmindproject.backend.logic.database;
 
 import javax.ejb.Stateless;
 import java.sql.*;
@@ -31,7 +31,7 @@ public class QuestionManager extends DatabaseManager<String>{
     /**
      * @return Every double[] contains 5 values for each category, the total length of the array is the total number of questions.
      */
-    double[][] getFactors(){
+    public double[][] getFactors(){
         try(Connection connection = DriverManager.getConnection(CONNECTION_STRING, USER, PASSWORD)){
             PreparedStatement ps = connection.prepareStatement("SELECT EXTRAVERSION, NEUROTICISM, OPENNESS, AGREEABLENESS, CONSCIENTIOUSNESS FROM QUESTION WHERE QUESTIONID < ? ORDER BY QUESTIONID");
 

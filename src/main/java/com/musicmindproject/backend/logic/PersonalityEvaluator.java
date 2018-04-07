@@ -1,20 +1,16 @@
 package com.musicmindproject.backend.logic;
 
+import com.musicmindproject.backend.logic.database.QuestionManager;
+
 import javax.annotation.PostConstruct;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+@Stateless
 public class PersonalityEvaluator {
     @Inject
     private QuestionManager questionManager;
     private double[][] factors;
-    private static PersonalityEvaluator instance;
-
-
-    public static PersonalityEvaluator getInstance(){
-        if(instance == null)
-            instance = new PersonalityEvaluator();
-        return instance;
-    }
 
     @PostConstruct
     private void init(){
@@ -41,6 +37,11 @@ public class PersonalityEvaluator {
      * @return calculated value for the requested personality type
      */
     private double computeResults(double[] inputs, int type){
+
+        if(inputs == null)
+            System.err.println("INPUTS IS NULL");
+        if(factors == null)
+            System.err.println("FACTORS IS NULL");
 
         if(inputs.length == factors[type].length){
             double productSum = 0;

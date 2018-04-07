@@ -1,4 +1,4 @@
-package com.musicmindproject.backend.logic;
+package com.musicmindproject.backend.logic.database;
 
 import com.musicmindproject.backend.entities.User;
 
@@ -37,7 +37,7 @@ public class UserManager extends DatabaseManager<User> {
     @Override
     public List<User> retrieveMany(int min, int max, String query) {
         if(query.equals("hottest") || query.equals("newest"))
-            return entityManager.createNamedQuery("User." + query, User.class).setFirstResult(0).setMaxResults(50).getResultList();
+            return entityManager.createNamedQuery("User." + query, User.class).setFirstResult(min).setMaxResults(max - min).getResultList();
         return entityManager.createNamedQuery("User.getByName", User.class).setParameter("uName", query).getResultList();
     }
 }

@@ -1,4 +1,4 @@
-package com.musicmindproject.backend.logic;
+package com.musicmindproject.backend.logic.database;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

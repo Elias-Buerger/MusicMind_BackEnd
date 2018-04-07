@@ -1,6 +1,6 @@
 package com.musicmindproject.backend.rest.endpoints;
 
-import com.musicmindproject.backend.logic.QuestionManager;
+import com.musicmindproject.backend.logic.database.QuestionManager;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
