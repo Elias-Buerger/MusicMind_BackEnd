@@ -34,8 +34,8 @@ public class MusicEndpoint {
      */
     @GET
     @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response doMusicGet(@PathParam("id") String id) {
-
         return Response.ok().entity(new GsonBuilder().create().toJson(userManager.retrieve(id))).build();
     }
 
@@ -104,6 +104,7 @@ public class MusicEndpoint {
      */
     @GET
     @Path("{query}/{min}/{max}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response doMusicGetForExplore(@PathParam("query") String query, @PathParam("min") int min, @PathParam("max") int max){
         return Response.ok(userManager.retrieveMany(min, max, query)).build();
     }
@@ -116,6 +117,7 @@ public class MusicEndpoint {
      */
     @GET
     @Path("play")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response doMusicPlay(JsonObject music){
         Play play = new GsonBuilder().create().fromJson(music.toString(), Play.class);
 

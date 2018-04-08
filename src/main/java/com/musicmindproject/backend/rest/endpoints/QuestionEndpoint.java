@@ -19,6 +19,7 @@ public class QuestionEndpoint {
      */
     @GET
     @Path("questionCount")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response doQuestionCountGet() {
         return Response.ok(questionManager.getNumberOfAvailableQuestions()).build();
     }

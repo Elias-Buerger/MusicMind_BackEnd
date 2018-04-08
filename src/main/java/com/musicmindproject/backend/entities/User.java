@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Table(name = "USER")
 @NamedQueries({
     @NamedQuery(name = "User.getAll", query = "SELECT u FROM User u"),
-    @NamedQuery(name = "User.hottest", query = "SELECT u FROM User u ORDER BY u.plays"),
+    @NamedQuery(name = "User.hottest", query = "SELECT u FROM User u ORDER BY u.plays DESC"),
     @NamedQuery(name = "User.newest", query = "SELECT u FROM User u ORDER BY u.dateOfCreation DESC"),
     @NamedQuery(name = "User.getByName", query = "SELECT u FROM User u WHERE u.userName LIKE :uName")
 })
