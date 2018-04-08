@@ -85,13 +85,9 @@ public class MidiGeneratorRunner {
 
                         //noinspection InfiniteLoopStatement
 
-                        Process magentaCommand;
-                        if (Files.notExists(Paths.get(String.format(OUTPUT_DIRECTORY, currName)))) {
-                            File dir = new File(String.format(OUTPUT_DIRECTORY, currName));
-                            dir.mkdir();
-                        }
+                        Process magentaCommand = Runtime.getRuntime().exec("");
 
-                        //if (new File(String.format(OUTPUT_DIRECTORY, currName)).listFiles().length < 10) {
+                        if (Files.notExists(Paths.get(String.format(OUTPUT_DIRECTORY, currName))) || new File(String.format(OUTPUT_DIRECTORY, currName)).listFiles().length < 10) {
                             magentaCommand = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "source /root/miniconda2/bin/activate magenta; bazel run //magenta/models/melody_rnn:melody_rnn_generate -- \\" +
                                     " --config=attention_rnn \\" +
                                     " --run_dir=" + String.format(RUN_DIRECTORY, currName) + " \\" +
@@ -102,6 +98,7 @@ public class MidiGeneratorRunner {
                                     " --primer_melody=\"[60]\""}, null, new File(WORKING_DIRECTORY));
                             //magentaCommand.waitFor();
                             System.out.println("1 FILE FOR " + currName + " CREATED");
+                        }
 
 
                         BufferedReader stdInput = new BufferedReader(new
