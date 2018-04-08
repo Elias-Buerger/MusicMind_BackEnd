@@ -69,7 +69,7 @@ public class MusicEndpoint {
         final String PATHNAME = "/mnt/sequences_tmp/melody_rnn/generated_tracks";
         File musicDirectory = new File(PATHNAME);
         Random rand = new Random();
-        String filepath = Objects.requireNonNull(musicDirectory.listFiles())[Math.abs(rand.nextInt()%Objects.requireNonNull(musicDirectory.listFiles()).length)].getAbsolutePath();
+        String filepath = Objects.requireNonNull(musicDirectory.listFiles())[Math.abs(rand.nextInt()%Objects.requireNonNull(musicDirectory.listFiles()).length)].getName();
 
         User user = userManager.retrieve(userID);
         if(user == null)
@@ -115,8 +115,9 @@ public class MusicEndpoint {
      *  - player = id of person who played music
      *  - played = id of person who created music
      */
-    @GET
+    @POST
     @Path("play")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response doMusicPlay(JsonObject music){
         Play play = new GsonBuilder().create().fromJson(music.toString(), Play.class);
