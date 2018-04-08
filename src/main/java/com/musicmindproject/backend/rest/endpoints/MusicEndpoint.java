@@ -1,6 +1,5 @@
 package com.musicmindproject.backend.rest.endpoints;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.musicmindproject.backend.entities.Play;
 import com.musicmindproject.backend.entities.User;
@@ -15,6 +14,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
+import java.util.Objects;
 import java.util.Random;
 
 @Path("music")
@@ -66,10 +66,10 @@ public class MusicEndpoint {
         double[] values = evaluator.getOutputs(answerNumbers);
 
         //TODO FINDING SPECIFIC MUSIC-TRACK
-        final String PATHNAME = "/mnt/sequences_tmp/melody_rnn/generated_tracks";
+        final String PATHNAME = "/mnt/sequences_tmp/melody_rnn/generated_tracks/country";
         File musicDirectory = new File(PATHNAME);
         Random rand = new Random();
-        String filepath = musicDirectory.listFiles()[Math.abs(rand.nextInt()%musicDirectory.listFiles().length)].getName();
+        String filepath = Objects.requireNonNull(musicDirectory.listFiles())[Math.abs(rand.nextInt()%Objects.requireNonNull(musicDirectory.listFiles()).length)].getName();
 
         User user = userManager.retrieve(userID);
         if(user == null)
@@ -97,10 +97,10 @@ public class MusicEndpoint {
      * - hottest
      * - everything else: name of the user / music-track
      * @param min
-     * Ignore
+     * First Track to return
      * @param max
-     * Ignore
-     * @return JsonArray of doMusicGet() with all Users (max 50 Users)
+     * Last track to return
+     * @return JsonArray of doMusicGet() with all Users (between min and max)
      */
     @GET
     @Path("{query}/{min}/{max}")
@@ -121,8 +121,12 @@ public class MusicEndpoint {
     public Response doMusicPlay(JsonObject music){
         Play play = new GsonBuilder().create().fromJson(music.toString(), Play.class);
 
-        if(playsManager.retrieve(play) != null)
+        if(playsManager.retrieve(play) == null) {
             playsManager.store(play);
+            User u = userManager.retrieve(play.getPlayed());
+            u.setPlays(u.getPlays() + 1);
+            userManager.store(u);
+        }
         return Response.ok().build();
     }
 }
