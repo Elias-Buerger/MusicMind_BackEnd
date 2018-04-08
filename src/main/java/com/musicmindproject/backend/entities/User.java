@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 @Table(name = "USER")
 @NamedQueries({
     @NamedQuery(name = "User.getAll", query = "SELECT u FROM User u"),
-    @NamedQuery(name = "User.hottest", query = "SELECT u FROM User u ORDER BY u.plays DESC"),
-    @NamedQuery(name = "User.newest", query = "SELECT u FROM User u ORDER BY u.dateOfCreation DESC"),
+    @NamedQuery(name = "User.hottest", query = "SELECT u FROM User u ORDER BY u.plays ASC"),
+    @NamedQuery(name = "User.newest", query = "SELECT u FROM User u ORDER BY u.dateOfCreation ASC"),
     @NamedQuery(name = "User.getByName", query = "SELECT u FROM User u WHERE u.userName LIKE :uName")
 })
 
@@ -47,20 +47,6 @@ public class User implements Serializable {
         this.shares = 0;
         this.plays = 0;
         this.dateOfCreation = Timestamp.valueOf(LocalDateTime.now());
-    }
-
-    public User(String userId, String userName, String pathToMusicTrack, double openness, double conscientiousness, double extraversion, double agreeableness, double neuroticism, int shares, int plays, Timestamp dateOfCreation) {
-        this.userId = userId;
-        this.userName = userName;
-        this.pathToMusicTrack = pathToMusicTrack;
-        this.openness = openness;
-        this.conscientiousness = conscientiousness;
-        this.extraversion = extraversion;
-        this.agreeableness = agreeableness;
-        this.neuroticism = neuroticism;
-        this.shares = shares;
-        this.plays = plays;
-        this.dateOfCreation = dateOfCreation;
     }
 
     public String getUserId() {

@@ -66,7 +66,7 @@ public class MusicEndpoint {
         double[] values = evaluator.getOutputs(answerNumbers);
 
         //TODO FINDING SPECIFIC MUSIC-TRACK
-        final String PATHNAME = "/mnt/sequences_tmp/melody_rnn/generated_tracks/country";
+        final String PATHNAME = "/mnt/sequences_tmp/melody_rnn/generated_tracks";
         File musicDirectory = new File(PATHNAME);
         Random rand = new Random();
         String filepath = Objects.requireNonNull(musicDirectory.listFiles())[Math.abs(rand.nextInt()%Objects.requireNonNull(musicDirectory.listFiles()).length)].getAbsolutePath();
