@@ -69,7 +69,7 @@ public class MusicEndpoint {
         final String PATHNAME = "/mnt/sequences_tmp/melody_rnn/generated_tracks/country";
         File musicDirectory = new File(PATHNAME);
         Random rand = new Random();
-        String filepath = Objects.requireNonNull(musicDirectory.listFiles())[Math.abs(rand.nextInt()%Objects.requireNonNull(musicDirectory.listFiles()).length)].getName();
+        String filepath = Objects.requireNonNull(musicDirectory.listFiles())[Math.abs(rand.nextInt()%Objects.requireNonNull(musicDirectory.listFiles()).length)].getAbsolutePath();
 
         User user = userManager.retrieve(userID);
         if(user == null)
