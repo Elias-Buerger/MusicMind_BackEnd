@@ -85,7 +85,7 @@ public class MidiGeneratorRunner {
 
                         //noinspection InfiniteLoopStatement
 
-                        Process magentaCommand = Runtime.getRuntime().exec("");
+                        Process magentaCommand = Runtime.getRuntime().exec("echo test");
 
                         if (Files.notExists(Paths.get(String.format(OUTPUT_DIRECTORY, currName))) || new File(String.format(OUTPUT_DIRECTORY, currName)).listFiles().length < 10) {
                             magentaCommand = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "source /root/miniconda2/bin/activate magenta; bazel run //magenta/models/melody_rnn:melody_rnn_generate -- \\" +
