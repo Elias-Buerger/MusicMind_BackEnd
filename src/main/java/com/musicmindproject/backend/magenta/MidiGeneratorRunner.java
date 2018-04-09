@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Objects;
 
-//@Startup
+@Startup
 @Singleton
 public class MidiGeneratorRunner {
     private static final String AVAILABLE_MUSIC = "/mnt/midifiles/%s";
@@ -76,7 +76,7 @@ public class MidiGeneratorRunner {
                         System.out.println("Name of network: " + currName);
                         if (Files.notExists(Paths.get(String.format(RUN_DIRECTORY, currName)))) {
                             System.out.println("Make RUNDIR for " + currName);
-                            Process networkTrainer = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "source /root/miniconda2/bin/activate magenta && sudo -S -u root -i /bin/bash -l -c 'bazel run //magenta/models/melody_rnn:melody_rnn_train -- \\" +
+                            Process networkTrainer = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "source /root/miniconda2/bin/activate magenta && sudo -E -S -u root -i /bin/bash -l -c 'cd /root/magenta/ && bazel run //magenta/models/melody_rnn:melody_rnn_train -- \\" +
                                     " --config=attention_rnn \\" +
                                     " --run_dir=" + String.format(RUN_DIRECTORY, currName) + " \\" +
                                     " --sequence_example_file=" + String.format(COUNTRY_SEQUENCE_EXAMPLE_FILE, currName) + " \\" +
@@ -92,7 +92,7 @@ public class MidiGeneratorRunner {
 
                         if (Files.notExists(Paths.get(String.format(OUTPUT_DIRECTORY, currName))) || new File(String.format(OUTPUT_DIRECTORY, currName)).listFiles().length < 10) {
                             System.out.println("Generate 1 file for " + currName);
-                            magentaCommand = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "source /root/miniconda2/bin/activate magenta && sudo -S -u root -i /bin/bash -l -c 'bazel run //magenta/models/melody_rnn:melody_rnn_generate -- \\" +
+                            magentaCommand = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "source /root/miniconda2/bin/activate magenta && sudo -E -S -u root -i /bin/bash -l -c 'cd /root/magenta/ && bazel run //magenta/models/melody_rnn:melody_rnn_generate -- \\" +
                                     " --config=attention_rnn \\" +
                                     " --run_dir=" + String.format(RUN_DIRECTORY, currName) + " \\" +
                                     " --output_dir=" + String.format(OUTPUT_DIRECTORY, currName) + " \\" +
@@ -100,25 +100,25 @@ public class MidiGeneratorRunner {
                                     " --num_steps=" + NUM_RUN_STEPS + " \\" +
                                     " --hparams=\"batch_size=64,rnn_layer_sizes=[64,64]\" \\" +
                                     " --primer_melody=\"[60]\"'"}, null, new File(WORKING_DIRECTORY));
-                            magentaCommand.waitFor();
+                            //magentaCommand.waitFor();
                             System.out.println("1 FILE FOR " + currName + " CREATED");
                         }
 
 
-//                        BufferedReader stdInput = new BufferedReader(new
-//                                InputStreamReader(magentaCommand.getInputStream()));
-//
-//                        BufferedReader stdError = new BufferedReader(new
-//                                InputStreamReader(magentaCommand.getErrorStream()));
-//                        System.out.println("Here is the standard output of the command:\n");
-//                        String s = null;
-//                        while ((s = stdInput.readLine()) != null) {
-//                            System.out.println(s);
-//                        }
-//                        System.out.println("Here is the standard error of the command (if any):\n");
-//                        while ((s = stdError.readLine()) != null) {
-//                            System.out.println(s);
-//                        }
+                        BufferedReader stdInput = new BufferedReader(new
+                                InputStreamReader(magentaCommand.getInputStream()));
+
+                        BufferedReader stdError = new BufferedReader(new
+                                InputStreamReader(magentaCommand.getErrorStream()));
+                        System.out.println("Here is the standard output of the command:\n");
+                        String s = null;
+                        while ((s = stdInput.readLine()) != null) {
+                            System.out.println(s);
+                        }
+                        System.out.println("Here is the standard error of the command (if any):\n");
+                        while ((s = stdError.readLine()) != null) {
+                            System.out.println(s);
+                        }
 
                         //} else {
 
