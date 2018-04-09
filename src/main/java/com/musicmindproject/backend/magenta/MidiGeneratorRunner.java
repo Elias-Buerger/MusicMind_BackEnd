@@ -73,6 +73,7 @@ public class MidiGeneratorRunner {
                                     datasetGenerator.waitFor();
                                     System.out.println("CREATED EXAMPLE FOR " + currName + "/" + instrument.name());
                                 }*/
+                        System.out.println("Name of network: " + currName);
                         if (Files.notExists(Paths.get(String.format(RUN_DIRECTORY, currName)))) {
                             Process networkTrainer = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "source /root/miniconda2/bin/activate magenta && sudo -S -u root -i /bin/bash -l -c 'bazel run //magenta/models/melody_rnn:melody_rnn_train -- \\" +
                                     " --config=attention_rnn \\" +
