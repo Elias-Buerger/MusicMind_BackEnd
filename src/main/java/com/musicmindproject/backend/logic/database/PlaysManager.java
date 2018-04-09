@@ -19,7 +19,9 @@ public class PlaysManager extends DatabaseManager<Play> {
 
     @Override
     public Play retrieve(Object id) {
-        return entityManager.createNamedQuery("Play.get", Play.class).getSingleResult();
+        Play play = (Play)id;
+        List<Play> plays = entityManager.createNamedQuery("Play.get", Play.class).setParameter("played", play.getPlayed()).setParameter("player", play.getPlayer()).getResultList();
+        return plays.size() == 0 ? null : plays.get(0);
     }
 
     @Override
