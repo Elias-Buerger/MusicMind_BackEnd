@@ -38,6 +38,6 @@ public class UserManager extends DatabaseManager<User> {
     public List<User> retrieveMany(int min, int max, String query) {
         if(query.equals("hottest") || query.equals("newest"))
             return entityManager.createNamedQuery("User." + query, User.class).setFirstResult(min).setMaxResults(max - min).getResultList();
-        return entityManager.createNamedQuery("User.getByName", User.class).setParameter("uName", query).getResultList();
+        return entityManager.createNamedQuery("User.getByName", User.class).setParameter("uName", "%" + query + "%").getResultList();
     }
 }

@@ -118,7 +118,6 @@ public class MusicEndpoint {
     @POST
     @Path("play")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response doMusicPlay(JsonObject music){
         Play play = new GsonBuilder().create().fromJson(music.toString(), Play.class);
 
@@ -128,6 +127,6 @@ public class MusicEndpoint {
             u.setPlays(u.getPlays() + 1);
             userManager.store(u);
         }
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 }

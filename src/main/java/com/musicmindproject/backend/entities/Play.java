@@ -9,13 +9,13 @@ public class Play {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PLAY_ID")
-    private Long playId;
+    private Integer playId;
     @Column(name = "PLAYER_USERID")
     private String player;
     @Column(name = "PLAYED_USERID")
     private String played;
 
-    public Play(long playId, String player, String played) {
+    public Play(Integer playId, String player, String played) {
         this.playId = playId;
         this.player = player;
         this.played = played;
@@ -44,7 +44,7 @@ public class Play {
         return playId;
     }
 
-    public void setPlayId(long playId) {
+    public void setPlayId(Integer playId) {
         this.playId = playId;
     }
 }

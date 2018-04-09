@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Objects;
 
-@Startup
+//@Startup
 @Singleton
 public class MidiGeneratorRunner {
     private static final String AVAILABLE_MUSIC = "/mnt/midifiles/%s";
