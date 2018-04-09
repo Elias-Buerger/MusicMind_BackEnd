@@ -74,7 +74,7 @@ public class MidiGeneratorRunner {
                                     System.out.println("CREATED EXAMPLE FOR " + currName + "/" + instrument.name());
                                 }*/
                         if (Files.notExists(Paths.get(String.format(RUN_DIRECTORY, currName)))) {
-                            Process networkTrainer = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "source /root/miniconda2/bin/activate magenta; sudo -S -u root -i /bin/bash -l -c 'bazel run //magenta/models/melody_rnn:melody_rnn_train -- \\" +
+                            Process networkTrainer = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "source /root/miniconda2/bin/activate magenta && sudo -S -u root -i /bin/bash -l -c 'bazel run //magenta/models/melody_rnn:melody_rnn_train -- \\" +
                                     " --config=attention_rnn \\" +
                                     " --run_dir=" + String.format(RUN_DIRECTORY, currName) + " \\" +
                                     " --sequence_example_file=" + String.format(COUNTRY_SEQUENCE_EXAMPLE_FILE, currName) + " \\" +
@@ -88,7 +88,7 @@ public class MidiGeneratorRunner {
                         Process magentaCommand = Runtime.getRuntime().exec("echo test");
 
                         if (Files.notExists(Paths.get(String.format(OUTPUT_DIRECTORY, currName))) || new File(String.format(OUTPUT_DIRECTORY, currName)).listFiles().length < 10) {
-                            magentaCommand = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "source /root/miniconda2/bin/activate magenta; sudo -S -u root -i /bin/bash -l -c 'bazel run //magenta/models/melody_rnn:melody_rnn_generate -- \\" +
+                            magentaCommand = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "source /root/miniconda2/bin/activate magenta && sudo -S -u root -i /bin/bash -l -c 'bazel run //magenta/models/melody_rnn:melody_rnn_generate -- \\" +
                                     " --config=attention_rnn \\" +
                                     " --run_dir=" + String.format(RUN_DIRECTORY, currName) + " \\" +
                                     " --output_dir=" + String.format(OUTPUT_DIRECTORY, currName) + " \\" +
