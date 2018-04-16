@@ -22,7 +22,7 @@ public class MidiGeneratorRunner {
     private static final String COUNTRY_SEQUENCE_EXAMPLE_FILE = "/mnt/sequence_examples/country/training_melodies.tfrecord";
     private static final String WORKING_DIRECTORY = "/root/magenta";
     private static final int NUM_TRAINING_STEPS = 1;
-    private static final int NUM_RUN_STEPS = 1;
+    private static final int NUM_RUN_STEPS = 128;
 
     /**
      * Runs commands to generate music and to train the neural network
