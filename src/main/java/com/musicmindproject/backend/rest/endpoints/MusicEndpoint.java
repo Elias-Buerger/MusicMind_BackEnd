@@ -71,9 +71,8 @@ public class MusicEndpoint {
         double[] values = evaluator.getOutputs(answerNumbers);
 
         //TODO FINDING SPECIFIC MUSIC-TRACK
-        File musicTrack = findFileForUser();
-        moveFile(musicTrack, userName, userID);
-        User user = storeUser(userID, userName, musicTrack.getName(), values);
+
+        User user = storeUser(userID, userName, moveFile(findFileForUser(), userName, userID).getName(), values);
 
 
         return Response.ok().entity(new GsonBuilder()
@@ -83,14 +82,15 @@ public class MusicEndpoint {
                 .build();
     }
 
-    private void moveFile(File musicTrack, String userName, String userID) {
-        File destination = new File(PATHNAME + "used_tracks/" + userName + "s_music.mid");
+    private File moveFile(File musicTrack, String userName, String userID) {
+        File destination = new File(PATHNAME + "used_tracks/" + userID.hashCode() + "_" + userName + "s_music.mid");
 
         try {
             Files.move(musicTrack.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return destination;
     }
 
     private User storeUser(String userID, String userName, String fileName, double[] values) {
@@ -108,7 +108,8 @@ public class MusicEndpoint {
             user.setShares(0);
             user.setPathToMusicTrack(fileName);
         }
-        return userManager.store(user);
+        userManager.store(user);
+        return user;
     }
 
     private File findFileForUser() {
