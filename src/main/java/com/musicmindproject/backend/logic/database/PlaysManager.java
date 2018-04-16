@@ -8,8 +8,8 @@ import java.util.List;
 @Stateless
 public class PlaysManager extends DatabaseManager<Play> {
     @Override
-    public void store(Play item) {
-        entityManager.merge(item);
+    public Play store(Play item) {
+        return entityManager.merge(item);
     }
 
     @Override

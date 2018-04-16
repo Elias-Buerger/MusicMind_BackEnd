@@ -58,8 +58,9 @@ public class QuestionManager extends DatabaseManager<String>{
     }
 
     @Override
-    public void store(String item) {
+    public String store(String item) {
         System.err.println("ADDING QUESTION NOT IMPLEMENTED");
+        return null;
     }
 
     @Override

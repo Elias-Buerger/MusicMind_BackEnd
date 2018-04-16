@@ -8,8 +8,8 @@ import java.util.List;
 @Stateless
 public class UserManager extends DatabaseManager<User> {
     @Override
-    public void store(User item) {
-        entityManager.merge(item);
+    public User store(User item) {
+        return entityManager.merge(item);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.musicmindproject.backend.logic.database;
 
+import com.musicmindproject.backend.entities.User;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +17,7 @@ public abstract class DatabaseManager<T> {
 
     DatabaseManager(){}
 
-    public abstract void store(T item);
+    public abstract T store(T item);
     public abstract List<T> retrieveAll();
     public abstract T retrieve(Object id);
     public abstract List<T> retrieveMany(int min, int max, String query);

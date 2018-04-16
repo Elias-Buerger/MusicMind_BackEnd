@@ -41,7 +41,7 @@ public class MusicEndpoint {
 
     /**
      *
-     * @param answer Answers the user has given
+     * @param answer Answers the user has given plus the Username and the ID
      * @return JSON-Object with the personality of the user represented by the Big-Five (see Wikipedia for more)
      */
     @POST
@@ -66,14 +66,20 @@ public class MusicEndpoint {
         double[] values = evaluator.getOutputs(answerNumbers);
 
         //TODO FINDING SPECIFIC MUSIC-TRACK
-        final String PATHNAME = "/mnt/sequences_tmp/melody_rnn/generated_tracks";
-        File musicDirectory = new File(PATHNAME);
-        Random rand = new Random();
-        String filepath = Objects.requireNonNull(musicDirectory.listFiles())[Math.abs(rand.nextInt()%Objects.requireNonNull(musicDirectory.listFiles()).length)].getName();
+        File musicTrack = findFileForUser();
 
+        return Response.ok().entity(new GsonBuilder()
+                .create()
+                .toJson(
+                        storeUser(userID, userName, musicTrack.getName(), values)))
+                .type(MediaType.APPLICATION_JSON)
+                .build();
+    }
+
+    private User storeUser(String userID, String userName, String fileName, double[] values) {
         User user = userManager.retrieve(userID);
         if(user == null)
-            user = new User(userID, userName, filepath, values[4], values[1], values[3], values[2], values[0]);
+            user = new User(userID, userName, fileName, values[4], values[1], values[3], values[2], values[0]);
         else {
             user.setAgreeableness(values[2]);
             user.setConscientiousness(values[1]);
@@ -83,11 +89,16 @@ public class MusicEndpoint {
             user.setUserName(userName);
             user.setPlays(0);
             user.setShares(0);
-            user.setPathToMusicTrack(filepath);
+            user.setPathToMusicTrack(fileName);
         }
-        userManager.store(user);
+        return userManager.store(user);
+    }
 
-        return Response.ok(new GsonBuilder().create().toJson(user), MediaType.APPLICATION_JSON).build();
+    private File findFileForUser() {
+        final String PATHNAME = "/mnt/sequences_tmp/melody_rnn/generated_tracks";
+        Random rand = new Random();
+        File[] allFiles = new File(PATHNAME).listFiles();
+         return allFiles[Math.abs(rand.nextInt()%Objects.requireNonNull(allFiles).length)];
     }
 
     /**
