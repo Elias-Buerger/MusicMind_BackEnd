@@ -12,8 +12,8 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-@Startup
-@Singleton
+//@Startup
+//@Singleton
 public class MidiGeneratorRunner {
     private static final String AVAILABLE_MUSIC = "/mnt/midifiles/%s";
     private static final String GENERATED_DATASET = "/mnt/sequence_examples/%s";
