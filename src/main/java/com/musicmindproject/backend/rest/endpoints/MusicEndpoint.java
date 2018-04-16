@@ -14,6 +14,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.Random;
 
@@ -27,6 +30,8 @@ public class MusicEndpoint {
     private QuestionManager questionManager;
     @Inject
     private PlaysManager playsManager;
+
+    private final String PATHNAME = "/mnt/sequences_tmp/melody_rnn/";
 
     /**
      * @param id ID of the user
@@ -67,13 +72,25 @@ public class MusicEndpoint {
 
         //TODO FINDING SPECIFIC MUSIC-TRACK
         File musicTrack = findFileForUser();
+        moveFile(musicTrack, userName, userID);
+        User user = storeUser(userID, userName, musicTrack.getName(), values);
+
 
         return Response.ok().entity(new GsonBuilder()
                 .create()
-                .toJson(
-                        storeUser(userID, userName, musicTrack.getName(), values)))
+                .toJson(user))
                 .type(MediaType.APPLICATION_JSON)
                 .build();
+    }
+
+    private void moveFile(File musicTrack, String userName, String userID) {
+        File destination = new File(PATHNAME + "used_tracks/" + userName + "s_music.mid");
+
+        try {
+            Files.move(musicTrack.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private User storeUser(String userID, String userName, String fileName, double[] values) {
@@ -95,9 +112,8 @@ public class MusicEndpoint {
     }
 
     private File findFileForUser() {
-        final String PATHNAME = "/mnt/sequences_tmp/melody_rnn/generated_tracks";
         Random rand = new Random();
-        File[] allFiles = new File(PATHNAME).listFiles();
+        File[] allFiles = new File(PATHNAME + "generated_tracks").listFiles();
          return allFiles[Math.abs(rand.nextInt()%Objects.requireNonNull(allFiles).length)];
     }
 
