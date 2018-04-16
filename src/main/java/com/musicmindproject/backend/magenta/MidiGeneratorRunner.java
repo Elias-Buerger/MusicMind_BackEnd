@@ -51,7 +51,6 @@ public class MidiGeneratorRunner {
                 try {
                     System.out.println("Name of network: " + currName);
                     Process networkTrainer = Runtime.getRuntime().exec("echo test");
-                    ;
                     if (Files.notExists(Paths.get(String.format(RUN_DIRECTORY, currName)))) {
                         System.out.println("Make RUNDIR for " + currName);
                         networkTrainer = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "sudo bash make_rundir.bash " + currName}, null, new File(WORKING_DIRECTORY));
