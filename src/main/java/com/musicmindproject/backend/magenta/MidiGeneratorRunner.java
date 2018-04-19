@@ -9,6 +9,7 @@ import javax.ejb.Startup;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.concurrent.TimeUnit;
 
 @Startup
 @Singleton
@@ -65,7 +66,7 @@ public class MidiGeneratorRunner {
                                 magentaCommand.waitFor();
                                 //System.out.println("1 FILE FOR " + currName + " CREATED");
                             }
-
+                            TimeUnit.SECONDS.sleep(5);
                         } catch (Exception e) {
                             System.err.println("Could not start magenta! No training or generating will be done. Reason: " + e.getLocalizedMessage());
                             e.printStackTrace();
