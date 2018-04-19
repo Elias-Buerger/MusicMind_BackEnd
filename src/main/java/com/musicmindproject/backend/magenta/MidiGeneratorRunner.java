@@ -47,8 +47,9 @@ public class MidiGeneratorRunner {
             for (Instrument instrument : genre.getInstruments()) {
                 String currName = genre.name().toLowerCase() + "_" + instrument.name().toLowerCase();
                 Thread toRun = new Thread(() -> {
-                    try {
-                        while (true) {
+                    while (true) {
+                        try {
+
                             //System.out.println("Name of network: " + currName);
                             Process networkTrainer = Runtime.getRuntime().exec("echo test");
                             if (Files.notExists(Paths.get(String.format(RUN_DIRECTORY, currName)))) {
@@ -64,12 +65,14 @@ public class MidiGeneratorRunner {
                                 magentaCommand.waitFor();
                                 //System.out.println("1 FILE FOR " + currName + " CREATED");
                             }
+
+                        } catch (Exception e) {
+                            System.err.println("Could not start magenta! No training or generating will be done. Reason: " + e.getLocalizedMessage());
+                            e.printStackTrace();
+                            System.err.println();
                         }
-                    } catch (Exception e) {
-                        System.err.println("Could not start magenta! No training or generating will be done. Reason: " + e.getLocalizedMessage());
-                        e.printStackTrace();
-                        System.err.println();
-                    }});
+                    }
+                });
                 toRun.start();
             }
         }
