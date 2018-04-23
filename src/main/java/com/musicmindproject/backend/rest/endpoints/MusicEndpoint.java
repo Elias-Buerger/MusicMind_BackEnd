@@ -3,6 +3,7 @@ package com.musicmindproject.backend.rest.endpoints;
 import com.google.gson.GsonBuilder;
 import com.musicmindproject.backend.entities.Play;
 import com.musicmindproject.backend.entities.User;
+import com.musicmindproject.backend.entities.enums.MusicGenre;
 import com.musicmindproject.backend.logic.PersonalityEvaluator;
 import com.musicmindproject.backend.logic.database.PlaysManager;
 import com.musicmindproject.backend.logic.database.QuestionManager;
@@ -10,6 +11,9 @@ import com.musicmindproject.backend.logic.database.UserManager;
 
 import javax.inject.Inject;
 import javax.json.JsonObject;
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -17,8 +21,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Path("music")
 public class MusicEndpoint {
@@ -82,7 +88,24 @@ public class MusicEndpoint {
     }
 
     private File convertToMP3(File toConvert) {
-        //TODO CONVERT TO MP3
+        AudioFileFormat.Type outputType = Arrays.stream(AudioSystem.getAudioFileTypes()).filter(ft -> ft.getExtension().equals("wav")).collect(Collectors.toList()).get(0);
+
+        if(outputType == null){
+            System.out.println("Output type not supported.");
+            return toConvert;
+        }//end else
+
+        AudioInputStream audioInputStream = null;
+        try{
+            audioInputStream = AudioSystem.getAudioInputStream(toConvert);
+
+            AudioSystem.write(audioInputStream,
+                    outputType,
+                    new File(toConvert.getAbsolutePath().substring(0, toConvert.getAbsolutePath().length() - 4)));
+        }catch (Exception e){
+            e.printStackTrace();
+        }//end catch
+
 
         return toConvert;
     }
@@ -90,7 +113,7 @@ public class MusicEndpoint {
     private File moveFile(File musicTrack, String userName, String userID) {
         musicTrack = convertToMP3(musicTrack);
 
-        File destination = new File(PATHNAME + "used_tracks/" + userID.hashCode() + "_" + userName + "s_music.mid");
+        File destination = new File(PATHNAME + "used_tracks/" + userID.hashCode() + "_" + userName + "s_music.wav");
 
         try {
             Files.move(musicTrack.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -123,8 +146,9 @@ public class MusicEndpoint {
         //TODO FIND SPECIFIC FILE FOR USER
 
         Random rand = new Random();
-        File[] allFiles = new File(PATHNAME + "generated_tracks").listFiles();
-        return allFiles[Math.abs(rand.nextInt() % Objects.requireNonNull(allFiles).length)];
+        MusicGenre g = MusicGenre.values()[Math.abs(rand.nextInt() % MusicGenre.values().length)];
+        File[] filesAvailable = new File(PATHNAME + "generated_tracks/" + g.name().toLowerCase() + "_" + g.getInstruments().get(Math.abs(rand.nextInt() % g.getInstruments().size())).name().toLowerCase()).listFiles();
+        return filesAvailable[Math.abs(rand.nextInt() % Objects.requireNonNull(filesAvailable).length)];
     }
 
     /**

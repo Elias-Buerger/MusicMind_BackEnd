@@ -6,10 +6,16 @@ import com.musicmindproject.backend.entities.enums.MusicGenre;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Startup
 @Singleton
@@ -52,20 +58,21 @@ public class MidiGeneratorRunner {
                         try {
 
                             //System.out.println("Name of network: " + currName);
-                            Process networkTrainer = Runtime.getRuntime().exec("echo test");
                             if (Files.notExists(Paths.get(String.format(RUN_DIRECTORY, currName)))) {
                                 //System.out.println("Make RUNDIR for " + currName);
-                                networkTrainer = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "sudo bash make_rundir.bash " + currName + " " + NUM_TRAINING_STEPS}, null, new File(WORKING_DIRECTORY));
+                                Process networkTrainer = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "sudo bash make_rundir.bash " + currName + " " + NUM_TRAINING_STEPS}, null, new File(WORKING_DIRECTORY));
                                 networkTrainer.waitFor();
                                 //System.out.println("RUNDIR FOR " + currName + " CREATED");
                             }
-                            Process magentaCommand = Runtime.getRuntime().exec("echo test");
-                            if (Files.notExists(Paths.get(String.format(OUTPUT_DIRECTORY, currName))) || new File(String.format(OUTPUT_DIRECTORY, currName)).listFiles().length < 10) {
+
+                            if (Files.notExists(Paths.get(String.format(OUTPUT_DIRECTORY, currName))) || Objects.requireNonNull(new File(String.format(OUTPUT_DIRECTORY, currName)).listFiles()).length < 10) {
                                 //System.out.println("Generate 1 file for " + currName);
-                                magentaCommand = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "sudo bash generate_file.bash " + currName + " " + NUM_RUN_STEPS}, null, new File(WORKING_DIRECTORY));
+                                Process magentaCommand = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "sudo bash generate_file.bash " + currName + " " + NUM_RUN_STEPS}, null, new File(WORKING_DIRECTORY));
                                 magentaCommand.waitFor();
+                                magentaCommand = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", String.format("chmod -R 777 " + OUTPUT_DIRECTORY, "")});
                                 //System.out.println("1 FILE FOR " + currName + " CREATED");
                             }
+
                             TimeUnit.SECONDS.sleep(5);
                         } catch (Exception e) {
                             System.err.println("Could not start magenta! No training or generating will be done. Reason: " + e.getLocalizedMessage());
@@ -78,4 +85,5 @@ public class MidiGeneratorRunner {
             }
         }
     }
+
 }
