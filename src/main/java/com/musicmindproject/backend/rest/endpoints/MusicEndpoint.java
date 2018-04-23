@@ -93,18 +93,17 @@ public class MusicEndpoint {
         if(outputType == null){
             System.out.println("Output type not supported.");
             return toConvert;
-        }//end else
+        }
 
-        AudioInputStream audioInputStream = null;
         try{
-            audioInputStream = AudioSystem.getAudioInputStream(toConvert);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(toConvert);
 
             AudioSystem.write(audioInputStream,
                     outputType,
                     new File(toConvert.getAbsolutePath().substring(0, toConvert.getAbsolutePath().length() - 4)));
         }catch (Exception e){
             e.printStackTrace();
-        }//end catch
+        }
 
 
         return toConvert;
