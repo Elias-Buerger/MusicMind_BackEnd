@@ -11,9 +11,6 @@ import com.musicmindproject.backend.logic.database.UserManager;
 
 import javax.inject.Inject;
 import javax.json.JsonObject;
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -21,10 +18,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Path("music")
 public class MusicEndpoint {
@@ -83,29 +78,19 @@ public class MusicEndpoint {
                 .type(MediaType.APPLICATION_JSON)
                 .build();
     }
-    private File convertToWAV(File toConvert) {
-        AudioFileFormat.Type outputType = Arrays.stream(AudioSystem.getAudioFileTypes()).filter(ft -> ft.getExtension().equals("wav")).collect(Collectors.toList()).get(0);
-
-        if(outputType == null){
-            System.out.println("Output type not supported.");
+    private File convertToMP3(File toConvert) {
+        try {
+            File tmp = new File(toConvert.getAbsolutePath().substring(0, toConvert.getAbsolutePath().length() - 4) + ".mp3");
+            Process p = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", String.format("timidity %s -Ow -o - | lame - -b 64 %s", toConvert.getAbsolutePath(), tmp.getAbsolutePath())});
+            p.waitFor();
+            return tmp;
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
             return toConvert;
         }
-
-        try{
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(toConvert);
-
-            AudioSystem.write(audioInputStream,
-                    outputType,
-                    new File(toConvert.getAbsolutePath().substring(0, toConvert.getAbsolutePath().length() - 4)));
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-
-        return toConvert;
     }
     private File createMusicFile(String userName, String userID, double[] values) {
-        File musicTrack = convertToWAV(findFileForUser(values));
+        File musicTrack = convertToMP3(findFileForUser(values));
         File destination = new File(PATHNAME + "used_tracks/" + userID.hashCode() + "_" + userName + "s_music.wav");
 
         try {
