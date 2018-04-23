@@ -5,6 +5,7 @@ import com.musicmindproject.backend.entities.Play;
 import com.musicmindproject.backend.entities.User;
 import com.musicmindproject.backend.entities.enums.MusicGenre;
 import com.musicmindproject.backend.logic.PersonalityEvaluator;
+import com.musicmindproject.backend.logic.PersonalityImageGenerator;
 import com.musicmindproject.backend.logic.database.PlaysManager;
 import com.musicmindproject.backend.logic.database.QuestionManager;
 import com.musicmindproject.backend.logic.database.UserManager;
@@ -36,6 +37,8 @@ public class MusicEndpoint {
     private QuestionManager questionManager;
     @Inject
     private PlaysManager playsManager;
+    @Inject
+    private PersonalityImageGenerator personalityImageGenerator;
 
     private final String PATHNAME = "/mnt/sequences_tmp/melody_rnn/";
 
@@ -131,6 +134,7 @@ public class MusicEndpoint {
             user.setPathToMusicTrack(fileName);
         }
         userManager.store(user);
+        personalityImageGenerator.generatePersonalityImage(user);
         return user;
     }
     private File findFileForUser(double[] values) {
