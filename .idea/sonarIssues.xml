@@ -13,6 +13,21 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/musicmindproject/backend/rest/endpoints/ShareEndpoint.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../MusicMind_FrontEnd/index.html">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../MusicMind_FrontEnd/js/index.js">
+          <value>
+            <set />
+          </value>
+        </entry>
       </map>
     </option>
   </component>
