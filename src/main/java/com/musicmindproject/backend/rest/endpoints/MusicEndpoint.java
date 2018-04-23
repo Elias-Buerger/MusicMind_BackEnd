@@ -74,11 +74,8 @@ public class MusicEndpoint {
         }
 
         double[] values = evaluator.getOutputs(answerNumbers);
-
-        //TODO FINDING SPECIFIC MUSIC-TRACK
-
-        User user = storeUser(userID, userName, moveFile(findFileForUser(values), userName, userID).getName(), values);
-
+        File musicFile = createMusicFile(userName, userID, values);
+        User user = storeUser(userID, userName, musicFile.getName(), values);
 
         return Response.ok().entity(new GsonBuilder()
                 .create()
@@ -86,8 +83,7 @@ public class MusicEndpoint {
                 .type(MediaType.APPLICATION_JSON)
                 .build();
     }
-
-    private File convertToMP3(File toConvert) {
+    private File convertToWAV(File toConvert) {
         AudioFileFormat.Type outputType = Arrays.stream(AudioSystem.getAudioFileTypes()).filter(ft -> ft.getExtension().equals("wav")).collect(Collectors.toList()).get(0);
 
         if(outputType == null){
@@ -108,10 +104,8 @@ public class MusicEndpoint {
 
         return toConvert;
     }
-
-    private File moveFile(File musicTrack, String userName, String userID) {
-        musicTrack = convertToMP3(musicTrack);
-
+    private File createMusicFile(String userName, String userID, double[] values) {
+        File musicTrack = convertToWAV(findFileForUser(values));
         File destination = new File(PATHNAME + "used_tracks/" + userID.hashCode() + "_" + userName + "s_music.wav");
 
         try {
@@ -121,7 +115,6 @@ public class MusicEndpoint {
         }
         return destination;
     }
-
     private User storeUser(String userID, String userName, String fileName, double[] values) {
         User user = userManager.retrieve(userID);
         if (user == null)
@@ -140,7 +133,6 @@ public class MusicEndpoint {
         userManager.store(user);
         return user;
     }
-
     private File findFileForUser(double[] values) {
         //TODO FIND SPECIFIC FILE FOR USER
 
