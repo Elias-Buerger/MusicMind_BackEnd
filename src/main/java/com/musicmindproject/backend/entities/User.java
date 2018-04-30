@@ -53,10 +53,6 @@ public class User implements Serializable {
         return userId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public String getUserName() {
         return userName;
     }
@@ -65,12 +61,12 @@ public class User implements Serializable {
         this.userName = userName;
     }
 
-    public String getPathToMusicTrack() {
+    public String getFilename() {
         return filename;
     }
 
-    public void setPathToMusicTrack(String pathToMusicTrack) {
-        this.filename = pathToMusicTrack;
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     public double getOpenness() {
@@ -113,10 +109,6 @@ public class User implements Serializable {
         this.neuroticism = neuroticism;
     }
 
-    public int getShares() {
-        return shares;
-    }
-
     public void setShares(int shares) {
         this.shares = shares;
     }
@@ -135,5 +127,9 @@ public class User implements Serializable {
 
     public void setDateOfCreation(Timestamp dateOfCreation) {
         this.dateOfCreation = dateOfCreation;
+    }
+
+    public int getShares() {
+        return shares;
     }
 }

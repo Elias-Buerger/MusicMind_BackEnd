@@ -18,7 +18,7 @@
         <setting name="provider-name" value="" />
         <datasource-mapping>
           <factory-entry name="Entities" />
-          <factory-entry name="MMPU" />
+          <factory-entry name="MMPU" value="0bbba21d-ddb5-4448-95ec-16edc376a2ce" />
           <factory-entry name="music-mind-persistence-unit" />
           <factory-entry name="mysql" />
         </datasource-mapping>

@@ -48,6 +48,24 @@ public class MusicEndpoint {
         return Response.ok().entity(new GsonBuilder().create().toJson(userManager.retrieve(id))).build();
     }
 
+    @GET
+    @Path("video/{id}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getVideo(@PathParam("id") String id) {
+        return Response.ok(generateVideo(userManager.retrieve(id))).type(MediaType.TEXT_PLAIN).build();
+    }
+
+    private String generateVideo(User user) {
+        try {
+            Process videoGenerator = Runtime.getRuntime().exec(String.format("ffmpeg -i /mnt/personality_images/%s.png -i /mnt/sequences_tmp/melody_rnn/used_tracks/%s.mp3 -strict -2 -c:v libx264 -pix_fmt yuv420p /mnt/personality_videos/%s.mp4 -y", user.getFilename(), user.getFilename(), user.getFilename()));
+            videoGenerator.waitFor();
+            return user.getFilename();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
     /**
      * @param answer Answers the user has given plus the Username and the ID
      * @return JSON-Object with the personality of the user represented by the Big-Five (see Wikipedia for more)
@@ -116,7 +134,7 @@ public class MusicEndpoint {
             user.setUserName(userName);
             user.setPlays(0);
             user.setShares(0);
-            user.setPathToMusicTrack(fileName);
+            user.setFilename(fileName);
         }
         userManager.store(user);
         personalityImageGenerator.generatePersonalityImage(user);
