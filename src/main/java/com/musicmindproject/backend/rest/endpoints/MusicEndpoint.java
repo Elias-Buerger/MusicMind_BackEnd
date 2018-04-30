@@ -73,7 +73,7 @@ public class MusicEndpoint {
 
         double[] values = evaluator.getOutputs(answerNumbers);
         File musicFile = createMusicFile(userName, userID, values);
-        User user = storeUser(userID, userName, musicFile.getName(), values);
+        User user = storeUser(userID, userName, musicFile.getName().substring(0, musicFile.getName().length() - 4), values);
 
         return Response.ok().entity(new GsonBuilder()
                 .create()
@@ -94,7 +94,7 @@ public class MusicEndpoint {
     }
     private File createMusicFile(String userName, String userID, double[] values) {
         File musicTrack = convertToMP3(findFileForUser(values));
-        File destination = new File(PATHNAME + "used_tracks/" + userID.hashCode() + "_" + userName + "s_music.wav");
+        File destination = new File(PATHNAME + "used_tracks/" + userID.hashCode() + "_" + userName + "s_music.mp3");
 
         try {
             Files.move(musicTrack.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);

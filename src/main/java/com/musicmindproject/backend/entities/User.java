@@ -20,7 +20,7 @@ public class User implements Serializable {
     private String userName;
 
     @Column(name = "PATH")
-    private String pathToMusicTrack;
+    private String filename;
     private double openness;
     private double conscientiousness;
     private double extraversion;
@@ -38,7 +38,7 @@ public class User implements Serializable {
     public User(String userId, String userName, String pathToMusicTrack, double openness, double conscientiousness, double extraversion, double agreeableness, double neuroticism) {
         this.userId = userId;
         this.userName = userName;
-        this.pathToMusicTrack = pathToMusicTrack;
+        this.filename = pathToMusicTrack;
         this.openness = openness;
         this.conscientiousness = conscientiousness;
         this.extraversion = extraversion;
@@ -66,11 +66,11 @@ public class User implements Serializable {
     }
 
     public String getPathToMusicTrack() {
-        return pathToMusicTrack;
+        return filename;
     }
 
     public void setPathToMusicTrack(String pathToMusicTrack) {
-        this.pathToMusicTrack = pathToMusicTrack;
+        this.filename = pathToMusicTrack;
     }
 
     public double getOpenness() {
