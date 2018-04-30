@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Path("music")
 public class MusicEndpoint {
@@ -59,6 +60,18 @@ public class MusicEndpoint {
         try {
             Process videoGenerator = Runtime.getRuntime().exec(String.format("ffmpeg -i /mnt/personality_images/%s.png -i /mnt/sequences_tmp/melody_rnn/used_tracks/%s.mp3 -strict -2 -c:v libx264 -pix_fmt yuv420p /mnt/personality_videos/%s.mp4 -y", user.getFilename(), user.getFilename(), user.getFilename()));
             videoGenerator.waitFor();
+
+            Thread thread = new Thread(() -> {
+                try {
+                    TimeUnit.MINUTES.sleep(10);
+                    Process videoDeleter = Runtime.getRuntime().exec(String.format("rm /mnt/personality_videos/%s.mp4", user.getFilename()));
+                    videoDeleter.waitFor();
+                } catch (InterruptedException | IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            thread.start();
+
             return user.getFilename();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
