@@ -94,7 +94,7 @@ public class MusicEndpoint {
     }
     private File createMusicFile(String userName, String userID, double[] values) {
         File musicTrack = convertToMP3(findFileForUser(values));
-        File destination = new File(PATHNAME + "used_tracks/" + userID.hashCode() + "_" + userName + "s_music.mp3");
+        File destination = new File(PATHNAME + "used_tracks/" + userID.hashCode() + "_" + userName + ".mp3");
 
         try {
             Files.move(musicTrack.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
