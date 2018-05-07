@@ -18,6 +18,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/musicmindproject/backend/entities/User.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/com/musicmindproject/backend/logic/PersonalityImageGenerator.java">
           <value>
             <set />
@@ -38,12 +43,22 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../MusicMind_FrontEnd/css/index.css">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../MusicMind_FrontEnd/explore.html">
           <value>
             <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/../MusicMind_FrontEnd/index.html">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../MusicMind_FrontEnd/js/explore.js">
           <value>
             <set />
           </value>
