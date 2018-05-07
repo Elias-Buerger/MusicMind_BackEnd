@@ -62,26 +62,41 @@ public class MusicEndpoint {
 
     private boolean generateVideo(String filepath) {
         try {
-            String[] command = new String[] {
-                    String.format("ffmpeg -i \"/mnt/personality_images/%s.png\" -i \"/mnt/sequences_tmp/melody_rnn/used_tracks/%s.mp3\" -strict -2 -c:v libx264 -pix_fmt yuv420p \"/mnt/personality_videos/%s.mp4\" -y", filepath, filepath, filepath)
+            String[] command = {
+//                    "/bin/bash",
+                    "ffmpeg",
+                    "-i",
+                    String.format("/mnt/personality_images/%s.png", filepath),
+                    "-i",
+                    String.format("/mnt/sequences_tmp/melody_rnn/used_tracks/%s.mp3", filepath),
+                    "-strict",
+                    "-2",
+                    "-c:v",
+                    "libx264",
+                    "-pix_fmt",
+                    "yuv420p",
+                    String.format("/mnt/personality_videos/%s.mp4", filepath),
+                    "-y"
             };
-            System.out.println(command);
             Process videoGenerator = Runtime.getRuntime().exec(command);
             int exitStatus = videoGenerator.waitFor();
 
 
-//            BufferedReader stdInput = new BufferedReader(new
-//                    InputStreamReader(videoGenerator.getInputStream()));
-//
-//            BufferedReader stdError = new BufferedReader(new
-//                    InputStreamReader(videoGenerator.getErrorStream()));
-//
-//            String s;
-//            while ((s = stdInput.readLine()) != null)
-//                System.out.println(s);
-//            System.out.println("------------------------------------------------------------------------------------------------------------------");
-//            while ((s = stdError.readLine()) != null)
-//                System.err.println(s);
+            BufferedReader stdInput = new BufferedReader(new
+                    InputStreamReader(videoGenerator.getInputStream()));
+
+            BufferedReader stdError = new BufferedReader(new
+                    InputStreamReader(videoGenerator.getErrorStream()));
+
+            System.out.println("STDOUT::::::::::::::::::::::::");
+            String s;
+            while ((s = stdInput.readLine()) != null)
+                System.out.println(s);
+            System.out.println("------------------------------------------------------------------------------------------------------------------");
+            System.out.println("STDERR::::::::::::::::::::::::");
+            while ((s = stdError.readLine()) != null)
+                System.err.println(s);
+            System.out.println("DONE::::::::::::::::::::::::::");
 
             if(exitStatus != 0)
                 return false;
@@ -96,6 +111,8 @@ public class MusicEndpoint {
                 }
             });
             thread.start();
+
+            Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "chmod -R 777 /mnt/personality_videos"});
 
             return true;
         } catch (IOException | InterruptedException e) {
