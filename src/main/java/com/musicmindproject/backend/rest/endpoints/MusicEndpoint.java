@@ -15,8 +15,10 @@ import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
@@ -53,13 +55,36 @@ public class MusicEndpoint {
     @Path("video/{filepath}")
     @Produces(MediaType.TEXT_PLAIN)
     public Response getVideo(@PathParam("filepath") String filepath) {
-        return Response.ok(generateVideo(filepath)).type(MediaType.TEXT_PLAIN).build();
+        if(generateVideo(filepath))
+            return Response.ok().type(MediaType.TEXT_PLAIN).build();
+        return Response.serverError().build();
     }
 
-    private String generateVideo(String filepath) {
+    private boolean generateVideo(String filepath) {
         try {
-            Process videoGenerator = Runtime.getRuntime().exec(String.format("ffmpeg -i \"/mnt/personality_images/%s.png\" -i \"/mnt/sequences_tmp/melody_rnn/used_tracks/%s.mp3\" -strict -2 -c:v libx264 -pix_fmt yuv420p \"/mnt/personality_videos/%s.mp4\" -y", filepath, filepath, filepath));
-            videoGenerator.waitFor();
+            String[] command = new String[] {
+                    String.format("ffmpeg -i \"/mnt/personality_images/%s.png\" -i \"/mnt/sequences_tmp/melody_rnn/used_tracks/%s.mp3\" -strict -2 -c:v libx264 -pix_fmt yuv420p \"/mnt/personality_videos/%s.mp4\" -y", filepath, filepath, filepath)
+            };
+            System.out.println(command);
+            Process videoGenerator = Runtime.getRuntime().exec(command);
+            int exitStatus = videoGenerator.waitFor();
+
+
+//            BufferedReader stdInput = new BufferedReader(new
+//                    InputStreamReader(videoGenerator.getInputStream()));
+//
+//            BufferedReader stdError = new BufferedReader(new
+//                    InputStreamReader(videoGenerator.getErrorStream()));
+//
+//            String s;
+//            while ((s = stdInput.readLine()) != null)
+//                System.out.println(s);
+//            System.out.println("------------------------------------------------------------------------------------------------------------------");
+//            while ((s = stdError.readLine()) != null)
+//                System.err.println(s);
+
+            if(exitStatus != 0)
+                return false;
 
             Thread thread = new Thread(() -> {
                 try {
@@ -72,10 +97,10 @@ public class MusicEndpoint {
             });
             thread.start();
 
-            return filepath;
+            return true;
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-            return "";
+            return false;
         }
     }
 
