@@ -58,13 +58,13 @@ public class MusicEndpoint {
 
     private String generateVideo(String filepath) {
         try {
-            Process videoGenerator = Runtime.getRuntime().exec(String.format("ffmpeg -i /mnt/personality_images/%s.png -i /mnt/sequences_tmp/melody_rnn/used_tracks/%s.mp3 -strict -2 -c:v libx264 -pix_fmt yuv420p /mnt/personality_videos/%s.mp4 -y", filepath, filepath, filepath));
+            Process videoGenerator = Runtime.getRuntime().exec(String.format("ffmpeg -i \"/mnt/personality_images/%s.png\" -i \"/mnt/sequences_tmp/melody_rnn/used_tracks/%s.mp3\" -strict -2 -c:v libx264 -pix_fmt yuv420p \"/mnt/personality_videos/%s.mp4\" -y", filepath, filepath, filepath));
             videoGenerator.waitFor();
 
             Thread thread = new Thread(() -> {
                 try {
                     TimeUnit.MINUTES.sleep(10);
-                    Process videoDeleter = Runtime.getRuntime().exec(String.format("rm /mnt/personality_videos/%s.mp4", filepath));
+                    Process videoDeleter = Runtime.getRuntime().exec(String.format("rm \"/mnt/personality_videos/%s.mp4\"", filepath));
                     videoDeleter.waitFor();
                 } catch (InterruptedException | IOException e) {
                     e.printStackTrace();
