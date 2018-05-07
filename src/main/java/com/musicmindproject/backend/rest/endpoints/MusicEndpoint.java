@@ -50,21 +50,21 @@ public class MusicEndpoint {
     }
 
     @GET
-    @Path("video/{id}")
+    @Path("video/{filepath}")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getVideo(@PathParam("id") String id) {
-        return Response.ok(generateVideo(userManager.retrieve(id))).type(MediaType.TEXT_PLAIN).build();
+    public Response getVideo(@PathParam("filepath") String filepath) {
+        return Response.ok(generateVideo(filepath)).type(MediaType.TEXT_PLAIN).build();
     }
 
-    private String generateVideo(User user) {
+    private String generateVideo(String filepath) {
         try {
-            Process videoGenerator = Runtime.getRuntime().exec(String.format("ffmpeg -i /mnt/personality_images/%s.png -i /mnt/sequences_tmp/melody_rnn/used_tracks/%s.mp3 -strict -2 -c:v libx264 -pix_fmt yuv420p /mnt/personality_videos/%s.mp4 -y", user.getFilename(), user.getFilename(), user.getFilename()));
+            Process videoGenerator = Runtime.getRuntime().exec(String.format("ffmpeg -i /mnt/personality_images/%s.png -i /mnt/sequences_tmp/melody_rnn/used_tracks/%s.mp3 -strict -2 -c:v libx264 -pix_fmt yuv420p /mnt/personality_videos/%s.mp4 -y", filepath, filepath, filepath));
             videoGenerator.waitFor();
 
             Thread thread = new Thread(() -> {
                 try {
                     TimeUnit.MINUTES.sleep(10);
-                    Process videoDeleter = Runtime.getRuntime().exec(String.format("rm /mnt/personality_videos/%s.mp4", user.getFilename()));
+                    Process videoDeleter = Runtime.getRuntime().exec(String.format("rm /mnt/personality_videos/%s.mp4", filepath));
                     videoDeleter.waitFor();
                 } catch (InterruptedException | IOException e) {
                     e.printStackTrace();
@@ -72,7 +72,7 @@ public class MusicEndpoint {
             });
             thread.start();
 
-            return user.getFilename();
+            return filepath;
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return "";
