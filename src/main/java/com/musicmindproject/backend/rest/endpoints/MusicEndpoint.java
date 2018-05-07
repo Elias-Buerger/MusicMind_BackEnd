@@ -51,6 +51,11 @@ public class MusicEndpoint {
         return Response.ok().entity(new GsonBuilder().create().toJson(userManager.retrieve(id))).build();
     }
 
+    /**
+     *
+     * @param filepath Path to the files belonging to the user
+     * @return ok if no error occurred
+     */
     @GET
     @Path("video/{filepath}")
     @Produces(MediaType.TEXT_PLAIN)
@@ -60,6 +65,11 @@ public class MusicEndpoint {
         return Response.serverError().build();
     }
 
+    /**
+     * Generates a video by merging the generated track and the generated image of the user
+     * @param filepath Path to the files belonging to the user
+     * @return true if no error occurred
+     */
     private boolean generateVideo(String filepath) {
         try {
             String[] command = {
