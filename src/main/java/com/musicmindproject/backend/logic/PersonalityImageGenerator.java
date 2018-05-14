@@ -17,7 +17,7 @@ public class PersonalityImageGenerator {
     private static final int SIDE = 100;
 
     private static final int IMAGE_WIDTH = 1200;
-    private static final int IMAGE_HEIGHT = 630;
+    private static final int IMAGE_HEIGHT = 675;
 
     private static final int BORDER_WIDTH = 4;
 
