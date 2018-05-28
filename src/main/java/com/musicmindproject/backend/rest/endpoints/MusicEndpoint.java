@@ -2,12 +2,14 @@ package com.musicmindproject.backend.rest.endpoints;
 
 import com.google.gson.GsonBuilder;
 import com.musicmindproject.backend.entities.Play;
+import com.musicmindproject.backend.entities.Share;
 import com.musicmindproject.backend.entities.User;
 import com.musicmindproject.backend.entities.enums.MusicGenre;
 import com.musicmindproject.backend.logic.PersonalityEvaluator;
 import com.musicmindproject.backend.logic.PersonalityImageGenerator;
 import com.musicmindproject.backend.logic.database.PlaysManager;
 import com.musicmindproject.backend.logic.database.QuestionManager;
+import com.musicmindproject.backend.logic.database.SharesManager;
 import com.musicmindproject.backend.logic.database.UserManager;
 
 import javax.inject.Inject;
@@ -35,6 +37,8 @@ public class MusicEndpoint {
     private QuestionManager questionManager;
     @Inject
     private PlaysManager playsManager;
+    @Inject
+    private SharesManager sharesManager;
     @Inject
     private PersonalityImageGenerator personalityImageGenerator;
 
@@ -245,6 +249,26 @@ public class MusicEndpoint {
             playsManager.store(play);
             User u = userManager.retrieve(play.getPlayed());
             u.setPlays(u.getPlays() + 1);
+            userManager.store(u);
+        }
+        return Response.noContent().build();
+    }
+
+    /**
+     * @param music object:
+     *              - share = id of person who shared music
+     *              - shared = id of person who's music was shared
+     */
+    @POST
+    @Path("share")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response increaseShares(JsonObject music) {
+        Share share = new GsonBuilder().create().fromJson(music.toString(), Share.class);
+
+        if (sharesManager.retrieve(share) == null) {
+            sharesManager.store(share);
+            User u = userManager.retrieve(share.getShared());
+            u.setShares(u.getShares() + 1);
             userManager.store(u);
         }
         return Response.noContent().build();
