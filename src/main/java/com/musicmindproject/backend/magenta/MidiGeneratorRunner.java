@@ -1,21 +1,13 @@
 package com.musicmindproject.backend.magenta;
 
-import com.musicmindproject.backend.entities.enums.Instrument;
-import com.musicmindproject.backend.entities.enums.MusicGenre;
-
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Startup
 @Singleton
@@ -23,7 +15,8 @@ public class MidiGeneratorRunner {
     private static final String AVAILABLE_MUSIC = "/mnt/midifiles/%s";
     private static final String GENERATED_DATASET = "/mnt/sequence_examples/%s";
     private static final String TFRECORD_FILE = "/mnt/sequences_tmp/%s.tfrecord";
-    private static final String RUN_DIRECTORY = "/mnt/sequences_tmp/melody_rnn/logdir/run_%s";
+    private static final String LOG_DIRECTORY = "/mnt/network_training/melody_rnn/logdir";
+    private static final String RUN_DIRECTORY = "/mnt/network_training/melody_rnn/logdir/run_%s";
     private static final String OUTPUT_DIRECTORY = "/mnt/sequences_tmp/melody_rnn/generated_tracks/%s";
     private static final String SEQUENCE_EXAMPLE_FILE = "/mnt/sequence_examples/%s/training_melodies.tfrecord";
     private static final String COUNTRY_SEQUENCE_EXAMPLE_FILE = "/mnt/sequence_examples/country/training_melodies.tfrecord";
@@ -49,41 +42,41 @@ public class MidiGeneratorRunner {
 
     @PostConstruct
     public void init() {
-        System.out.println("SERVER STARTED");
-        for (MusicGenre genre : MusicGenre.values()) {
-            for (Instrument instrument : genre.getInstruments()) {
-                String currName = genre.name().toLowerCase() + "_" + instrument.name().toLowerCase();
-                Thread toRun = new Thread(() -> {
-                    while (true) {
-                        try {
+        File logDir = new File(LOG_DIRECTORY);
+        File[] runDirs = logDir.listFiles();
+        for(File subdir: runDirs) {
+            String currName = subdir.getName().replace("run_", "");
+            Thread toRun = new Thread(() -> {
+                while (true) {
+                    try {
 
-                            //System.out.println("Name of network: " + currName);
-                            if (Files.notExists(Paths.get(String.format(RUN_DIRECTORY, currName)))) {
-                                //System.out.println("Make RUNDIR for " + currName);
-                                Process networkTrainer = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "sudo bash make_rundir.bash " + currName + " " + NUM_TRAINING_STEPS}, null, new File(WORKING_DIRECTORY));
-                                networkTrainer.waitFor();
-                                //System.out.println("RUNDIR FOR " + currName + " CREATED");
-                            }
-
-                            if (Files.notExists(Paths.get(String.format(OUTPUT_DIRECTORY, currName))) || Objects.requireNonNull(new File(String.format(OUTPUT_DIRECTORY, currName)).listFiles()).length < 10) {
-                                //System.out.println("Generate 1 file for " + currName);
-                                Process magentaCommand = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "sudo bash generate_file.bash " + currName + " " + NUM_RUN_STEPS}, null, new File(WORKING_DIRECTORY));
-                                magentaCommand.waitFor();
-                                magentaCommand = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", String.format("chmod -R 777 " + OUTPUT_DIRECTORY, "")});
-                                //System.out.println("1 FILE FOR " + currName + " CREATED");
-                            }
-
-                            TimeUnit.SECONDS.sleep(5);
-                        } catch (Exception e) {
-                            System.err.println("Could not start magenta! No training or generating will be done. Reason: " + e.getLocalizedMessage());
-                            e.printStackTrace();
-                            System.err.println();
+                        //System.out.println("Name of network: " + currName);
+                        if (Files.notExists(Paths.get(String.format(RUN_DIRECTORY, currName)))) {
+                            //System.out.println("Make RUNDIR for " + currName);
+                            Process networkTrainer = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "sudo bash make_rundir.bash " + currName}, null, new File(WORKING_DIRECTORY));
+                            networkTrainer.waitFor();
+                            //System.out.println("RUNDIR FOR " + currName + " CREATED");
                         }
+
+                        if (Files.notExists(Paths.get(String.format(OUTPUT_DIRECTORY, currName))) || Objects.requireNonNull(new File(String.format(OUTPUT_DIRECTORY, currName)).listFiles()).length < 10) {
+                            //System.out.println("Generate 1 file for " + currName);
+                            Process magentaCommand = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "sudo bash generate_file.bash " + currName + " " + NUM_RUN_STEPS}, null, new File(WORKING_DIRECTORY));
+                            magentaCommand.waitFor();
+                            magentaCommand = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", String.format("chmod -R 777 " + OUTPUT_DIRECTORY, "")});
+                            //System.out.println("1 FILE FOR " + currName + " CREATED");
+                        }
+
+                        TimeUnit.SECONDS.sleep(5);
+                    } catch (Exception e) {
+                        System.err.println("Could not start magenta! No training or generating will be done. Reason: " + e.getLocalizedMessage());
+                        e.printStackTrace();
+                        System.err.println();
                     }
-                });
-                toRun.start();
-            }
+                }
+            });
+            toRun.start();
         }
+
     }
 
 }
