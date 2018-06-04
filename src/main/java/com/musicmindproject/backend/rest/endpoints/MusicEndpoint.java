@@ -2,12 +2,13 @@ package com.musicmindproject.backend.rest.endpoints;
 
 import com.google.gson.GsonBuilder;
 import com.musicmindproject.backend.entities.Play;
+import com.musicmindproject.backend.entities.Share;
 import com.musicmindproject.backend.entities.User;
-import com.musicmindproject.backend.entities.enums.MusicGenre;
 import com.musicmindproject.backend.logic.PersonalityEvaluator;
 import com.musicmindproject.backend.logic.PersonalityImageGenerator;
 import com.musicmindproject.backend.logic.database.PlaysManager;
 import com.musicmindproject.backend.logic.database.QuestionManager;
+import com.musicmindproject.backend.logic.database.SharesManager;
 import com.musicmindproject.backend.logic.database.UserManager;
 
 import javax.inject.Inject;
@@ -36,9 +37,9 @@ public class MusicEndpoint {
     @Inject
     private PlaysManager playsManager;
     @Inject
+    private SharesManager sharesManager;
+    @Inject
     private PersonalityImageGenerator personalityImageGenerator;
-
-    private final String PATHNAME = "/mnt/sequences_tmp/melody_rnn/";
 
     /**
      * @param id ID of the user
@@ -78,7 +79,7 @@ public class MusicEndpoint {
                     "-i",
                     String.format("/mnt/personality_images/%s.png", filepath),
                     "-i",
-                    String.format("/mnt/sequences_tmp/melody_rnn/used_tracks/%s.mp3", filepath),
+                    String.format("/mnt/personality_music/%s.mp3", filepath),
                     "-strict",
                     "-2",
                     "-c:v",
@@ -177,7 +178,8 @@ public class MusicEndpoint {
     }
     private File createMusicFile(String userName, String userID, double[] values) {
         File musicTrack = convertToMP3(findFileForUser(values));
-        File destination = new File(PATHNAME + "used_tracks/" + userID.hashCode() + "_" + userName + ".mp3");
+        String MUSIC_PATH = "/mnt/personality_music";
+        File destination = new File(MUSIC_PATH + "/" + userID.hashCode() + "_" + userName + ".mp3");
 
         try {
             Files.move(musicTrack.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -209,9 +211,14 @@ public class MusicEndpoint {
         //TODO FIND SPECIFIC FILE FOR USER
 
         Random rand = new Random();
-        MusicGenre g = MusicGenre.values()[Math.abs(rand.nextInt() % MusicGenre.values().length)];
-        File[] filesAvailable = new File(PATHNAME + "generated_tracks/" + g.name().toLowerCase() + "_" + g.getInstruments().get(Math.abs(rand.nextInt() % g.getInstruments().size())).name().toLowerCase()).listFiles();
-        return filesAvailable[Math.abs(rand.nextInt() % Objects.requireNonNull(filesAvailable).length)];
+        String MIDI_PATH = "/mnt/generated_tracks";
+
+        File genreFolder = Objects.requireNonNull(new File(MIDI_PATH).listFiles())[rand.nextInt() % Objects.requireNonNull(new File(MIDI_PATH).listFiles()).length];
+        File instrumentsFolder = Objects.requireNonNull(genreFolder.listFiles())[rand.nextInt() % Objects.requireNonNull(genreFolder.listFiles()).length];
+        return Objects.requireNonNull(instrumentsFolder.listFiles())[rand.nextInt() % Objects.requireNonNull(instrumentsFolder.listFiles()).length];
+//        MusicGenre genre = MusicGenre.values()[Math.abs(rand.nextInt() % MusicGenre.values().length)];
+//        File[] filesAvailable = new File(MIDI_PATH + "/" + genre.name().toLowerCase() + "/" + genre.getInstruments().get(Math.abs(rand.nextInt() % genre.getInstruments().size())).name().toLowerCase()).listFiles();
+//        return filesAvailable[Math.abs(rand.nextInt() % Objects.requireNonNull(filesAvailable).length)];
     }
 
     /**
@@ -245,6 +252,26 @@ public class MusicEndpoint {
             playsManager.store(play);
             User u = userManager.retrieve(play.getPlayed());
             u.setPlays(u.getPlays() + 1);
+            userManager.store(u);
+        }
+        return Response.noContent().build();
+    }
+
+    /**
+     * @param music object:
+     *              - share = id of person who shared music
+     *              - shared = id of person who's music was shared
+     */
+    @POST
+    @Path("share")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response increaseShares(JsonObject music) {
+        Share share = new GsonBuilder().create().fromJson(music.toString(), Share.class);
+
+        if (sharesManager.retrieve(share) == null) {
+            sharesManager.store(share);
+            User u = userManager.retrieve(share.getShared());
+            u.setShares(u.getShares() + 1);
             userManager.store(u);
         }
         return Response.noContent().build();
