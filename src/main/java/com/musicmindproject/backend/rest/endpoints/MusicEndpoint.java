@@ -213,9 +213,8 @@ public class MusicEndpoint {
         Random rand = new Random();
         String MIDI_PATH = "/mnt/generated_tracks";
 
-        File genreFolder = Objects.requireNonNull(new File(MIDI_PATH).listFiles())[rand.nextInt() % Objects.requireNonNull(new File(MIDI_PATH).listFiles()).length];
-        File instrumentsFolder = Objects.requireNonNull(genreFolder.listFiles())[rand.nextInt() % Objects.requireNonNull(genreFolder.listFiles()).length];
-        return Objects.requireNonNull(instrumentsFolder.listFiles())[rand.nextInt() % Objects.requireNonNull(instrumentsFolder.listFiles()).length];
+        File genreAndInstrumentsFolder = Objects.requireNonNull(new File(MIDI_PATH).listFiles())[rand.nextInt() % Objects.requireNonNull(new File(MIDI_PATH).listFiles()).length];
+        return Objects.requireNonNull(genreAndInstrumentsFolder.listFiles())[rand.nextInt() % Objects.requireNonNull(genreAndInstrumentsFolder.listFiles()).length];
 //        MusicGenre genre = MusicGenre.values()[Math.abs(rand.nextInt() % MusicGenre.values().length)];
 //        File[] filesAvailable = new File(MIDI_PATH + "/" + genre.name().toLowerCase() + "/" + genre.getInstruments().get(Math.abs(rand.nextInt() % genre.getInstruments().size())).name().toLowerCase()).listFiles();
 //        return filesAvailable[Math.abs(rand.nextInt() % Objects.requireNonNull(filesAvailable).length)];
