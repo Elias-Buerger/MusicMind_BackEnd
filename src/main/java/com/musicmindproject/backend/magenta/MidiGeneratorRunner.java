@@ -17,12 +17,12 @@ public class MidiGeneratorRunner {
     private static final String WORKING_DIRECTORY = "/root/magenta";
     private static final int NUM_RUN_STEPS = 128;
 
-    /**
-     * Runs commands to generate music and to train the neural network
-     */
-
     private static MidiGeneratorRunner instance;
 
+    /**
+     * Singleton for MidiGeneratorRunner
+     * @return singleton instance of MidiGeneratorRunner
+     */
     public static MidiGeneratorRunner getInstance() {
         if (instance == null) instance = new MidiGeneratorRunner();
         return instance;
@@ -31,8 +31,9 @@ public class MidiGeneratorRunner {
     private MidiGeneratorRunner() {
     }
 
-    int exitStatus;
-
+    /**
+     * runs a bash script for every neural network, when there are less than 10 generated tracks in the corresponding target directory
+     */
     @PostConstruct
     public void init() {
         File logDir = new File(LOG_DIRECTORY);
@@ -47,6 +48,7 @@ public class MidiGeneratorRunner {
                             Process magentaCommand = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "sudo bash generate_file.bash " + currName + " " + NUM_RUN_STEPS}, null, new File(WORKING_DIRECTORY));
                             magentaCommand.waitFor();
                             magentaCommand = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", String.format("chmod -R 777 " + OUTPUT_DIRECTORY, "")});
+                            magentaCommand.waitFor();
                             //System.out.println("1 FILE FOR " + currName + " CREATED");
                         }
 
