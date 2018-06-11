@@ -16,10 +16,8 @@ import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
@@ -92,27 +90,10 @@ public class MusicEndpoint {
             Process videoGenerator = Runtime.getRuntime().exec(command);
             int exitStatus = videoGenerator.waitFor();
 
-
-            BufferedReader stdInput = new BufferedReader(new
-                    InputStreamReader(videoGenerator.getInputStream()));
-
-            BufferedReader stdError = new BufferedReader(new
-                    InputStreamReader(videoGenerator.getErrorStream()));
-
-            System.out.println("STDOUT::::::::::::::::::::::::");
-            String s;
-            while ((s = stdInput.readLine()) != null)
-                System.out.println(s);
-            System.out.println("------------------------------------------------------------------------------------------------------------------");
-            System.out.println("STDERR::::::::::::::::::::::::");
-            while ((s = stdError.readLine()) != null)
-                System.err.println(s);
-            System.out.println("DONE::::::::::::::::::::::::::");
-
             if(exitStatus != 0)
                 return false;
 
-            Thread thread = new Thread(() -> {
+            new Thread(() -> {
                 try {
                     TimeUnit.MINUTES.sleep(10);
                     Process videoDeleter = Runtime.getRuntime().exec(String.format("rm \"/mnt/personality_videos/%s.mp4\"", filepath));
@@ -120,11 +101,8 @@ public class MusicEndpoint {
                 } catch (InterruptedException | IOException e) {
                     e.printStackTrace();
                 }
-            });
-            thread.start();
-
+            }).start();
             Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", "chmod -R 777 /mnt/personality_videos"});
-
             return true;
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -135,6 +113,9 @@ public class MusicEndpoint {
     /**
      * @param answer Answers the user has given plus the Username and the ID
      * @return JSON-Object with the personality of the user represented by the Big-Five (see Wikipedia for more)
+     *
+     * Evaluates the users personality and creates music based on the values.
+     * An image containing a visualisation of the personality is generated too.
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -158,6 +139,7 @@ public class MusicEndpoint {
         double[] values = evaluator.getOutputs(answerNumbers);
         File musicFile = createMusicFile(userName, userID, values);
         User user = storeUser(userID, userName, musicFile.getName().substring(0, musicFile.getName().length() - 4), values);
+        personalityImageGenerator.generatePersonalityImage(user);
 
         return Response.ok().entity(new GsonBuilder()
                 .create()
@@ -165,6 +147,14 @@ public class MusicEndpoint {
                 .type(MediaType.APPLICATION_JSON)
                 .build();
     }
+
+    /**
+     *
+     * @param toConvert file to convert (has to be .mid-format)
+     * @return converted file (has .mp3-format)
+     *
+     * Converts a MIDI-File to a mp3 using timidity
+     */
     private File convertToMP3(File toConvert) {
         try {
             File tmp = new File(toConvert.getAbsolutePath().substring(0, toConvert.getAbsolutePath().length() - 4) + ".mp3");
@@ -176,6 +166,16 @@ public class MusicEndpoint {
             return toConvert;
         }
     }
+
+    /**
+     *
+     * @param userName name of the user
+     * @param userID id of the user (if already in database)
+     * @param values the evaluated values of the users personality
+     * @return the users generated music-file
+     *
+     * Creates a music-file based on the users personality.
+     */
     private File createMusicFile(String userName, String userID, double[] values) {
         File musicTrack = convertToMP3(findFileForUser(values));
         String MUSIC_PATH = "/mnt/personality_music";
@@ -188,6 +188,17 @@ public class MusicEndpoint {
         }
         return destination;
     }
+
+    /**
+     *
+     * @param userName name of the user
+     * @param userID id of the user (if already in database)
+     * @param values the evaluated values of the users personality
+     * @param fileName the users music-file
+     * @return the user which was stored in the database
+     *
+     * Stores an user in the database along with the path to his music-file
+     */
     private User storeUser(String userID, String userName, String fileName, double[] values) {
         User user = userManager.retrieve(userID);
         if (user == null)
@@ -203,10 +214,17 @@ public class MusicEndpoint {
             user.setShares(0);
             user.setFilename(fileName);
         }
-        userManager.store(user);
-        personalityImageGenerator.generatePersonalityImage(user);
-        return user;
+
+        return userManager.store(user);
     }
+
+    /**
+     *
+     * @param values the evaluated values of the users personality
+     * @return the users music-file
+     *
+     * Merges single music-tracks to one big music-file based on the users personality
+     */
     private File findFileForUser(double[] values) {
         //TODO FIND SPECIFIC FILE FOR USER
 
@@ -215,9 +233,6 @@ public class MusicEndpoint {
 
         File genreAndInstrumentsFolder = Objects.requireNonNull(new File(MIDI_PATH).listFiles())[rand.nextInt() % Objects.requireNonNull(new File(MIDI_PATH).listFiles()).length];
         return Objects.requireNonNull(genreAndInstrumentsFolder.listFiles())[rand.nextInt() % Objects.requireNonNull(genreAndInstrumentsFolder.listFiles()).length];
-//        MusicGenre genre = MusicGenre.values()[Math.abs(rand.nextInt() % MusicGenre.values().length)];
-//        File[] filesAvailable = new File(MIDI_PATH + "/" + genre.name().toLowerCase() + "/" + genre.getInstruments().get(Math.abs(rand.nextInt() % genre.getInstruments().size())).name().toLowerCase()).listFiles();
-//        return filesAvailable[Math.abs(rand.nextInt() % Objects.requireNonNull(filesAvailable).length)];
     }
 
     /**

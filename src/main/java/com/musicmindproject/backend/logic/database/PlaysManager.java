@@ -13,11 +13,6 @@ public class PlaysManager extends DatabaseManager<Play> {
     }
 
     @Override
-    public List<Play> retrieveAll() {
-        return null;
-    }
-
-    @Override
     public Play retrieve(Object id) {
         Play play = (Play)id;
         List<Play> plays = entityManager.createNamedQuery("Play.get", Play.class).setParameter("played", play.getPlayed()).setParameter("player", play.getPlayer()).getResultList();

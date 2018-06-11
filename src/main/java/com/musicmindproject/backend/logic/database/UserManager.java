@@ -13,11 +13,6 @@ public class UserManager extends DatabaseManager<User> {
     }
 
     @Override
-    public List<User> retrieveAll() {
-        return entityManager.createNamedQuery("User.getAll", User.class).getResultList();
-    }
-
-    @Override
     public User retrieve(Object id) {
         return entityManager.find(User.class, id);
     }

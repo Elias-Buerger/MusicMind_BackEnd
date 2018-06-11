@@ -1,6 +1,5 @@
 package com.musicmindproject.backend.logic.database;
 
-import com.musicmindproject.backend.entities.Play;
 import com.musicmindproject.backend.entities.Share;
 
 import javax.ejb.Stateless;
@@ -11,11 +10,6 @@ public class SharesManager extends DatabaseManager<Share> {
     @Override
     public Share store(Share item) {
         return entityManager.merge(item);
-    }
-
-    @Override
-    public List<Share> retrieveAll() {
-        return null;
     }
 
     @Override

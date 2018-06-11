@@ -63,11 +63,6 @@ public class QuestionManager extends DatabaseManager<String>{
         return null;
     }
 
-    @Override
-    public List<String> retrieveAll() {
-        return null;
-    }
-
     /**
      * @param id Id of the question in the database
      * @return The text of the wanted question in the given language
