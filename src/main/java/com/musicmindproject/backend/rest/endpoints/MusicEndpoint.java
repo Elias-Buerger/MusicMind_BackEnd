@@ -16,8 +16,10 @@ import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
@@ -150,25 +152,6 @@ public class MusicEndpoint {
 
     /**
      *
-     * @param toConvert file to convert (has to be .mid-format)
-     * @return converted file (has .mp3-format)
-     *
-     * Converts a MIDI-File to a mp3 using timidity
-     */
-    private File convertToMP3(File toConvert) {
-        try {
-            File tmp = new File(toConvert.getAbsolutePath().substring(0, toConvert.getAbsolutePath().length() - 4) + ".mp3");
-            Process p = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", String.format("timidity %s -Ow -o - | lame - -b 64 %s", toConvert.getAbsolutePath(), tmp.getAbsolutePath())});
-            p.waitFor();
-            return tmp;
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            return toConvert;
-        }
-    }
-
-    /**
-     *
      * @param userName name of the user
      * @param userID id of the user (if already in database)
      * @param values the evaluated values of the users personality
@@ -187,6 +170,43 @@ public class MusicEndpoint {
             e.printStackTrace();
         }
         return destination;
+    }
+
+    /**
+     *
+     * @param values the evaluated values of the users personality
+     * @return the users music-file
+     *
+     * Merges single music-tracks to one big music-file based on the users personality
+     */
+    private File findFileForUser(double[] values) {
+        //TODO FIND SPECIFIC FILE FOR USER
+
+        Random rand = new Random();
+        String MIDI_PATH = "/mnt/generated_tracks";
+
+        File genreAndInstrumentsFolder = Objects.requireNonNull(new File(MIDI_PATH).listFiles())[Math.abs(rand.nextInt()) % Objects.requireNonNull(new File(MIDI_PATH).listFiles()).length];
+        return Objects.requireNonNull(genreAndInstrumentsFolder.listFiles())[Math.abs(rand.nextInt()) % Objects.requireNonNull(genreAndInstrumentsFolder.listFiles()).length];
+    }
+
+    /**
+     *
+     * @param toConvert file to convert (has to be .mid-format)
+     * @return converted file (has .mp3-format)
+     *
+     * Converts a MIDI-File to a mp3 using timidity
+     */
+    private File convertToMP3(File toConvert) {
+        try {
+            System.out.println("Converting " + toConvert.getAbsolutePath());
+            File tmp = new File(toConvert.getAbsolutePath().substring(0, toConvert.getAbsolutePath().length() - 4) + ".mp3");
+            Process p = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", String.format("timidity %s -Ow -o - | lame - -b 64 %s", toConvert.getAbsolutePath(), tmp.getAbsolutePath())});
+            p.waitFor();
+            return tmp;
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return toConvert;
+        }
     }
 
     /**
@@ -216,23 +236,6 @@ public class MusicEndpoint {
         }
 
         return userManager.store(user);
-    }
-
-    /**
-     *
-     * @param values the evaluated values of the users personality
-     * @return the users music-file
-     *
-     * Merges single music-tracks to one big music-file based on the users personality
-     */
-    private File findFileForUser(double[] values) {
-        //TODO FIND SPECIFIC FILE FOR USER
-
-        Random rand = new Random();
-        String MIDI_PATH = "/mnt/generated_tracks";
-
-        File genreAndInstrumentsFolder = Objects.requireNonNull(new File(MIDI_PATH).listFiles())[rand.nextInt() % Objects.requireNonNull(new File(MIDI_PATH).listFiles()).length];
-        return Objects.requireNonNull(genreAndInstrumentsFolder.listFiles())[rand.nextInt() % Objects.requireNonNull(genreAndInstrumentsFolder.listFiles()).length];
     }
 
     /**
